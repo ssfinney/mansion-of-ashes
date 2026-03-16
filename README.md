@@ -23,6 +23,7 @@ The first playable prototype is a deterministic narrative slice. You wake in a f
 ├── build/
 ├── docs/
 │   ├── backlog.md
+│   ├── claude-collaboration.md
 │   ├── game-design.md
 │   ├── narrative-map.md
 │   └── variables.md
@@ -60,6 +61,10 @@ This repository does not depend on runtime AI generation. All state and outcomes
 - Compact branching with reconvergence instead of branch sprawl
 - Choices that shift interpretation, trust, and what the player knows
 - Clean variable naming and maintainable SugarCube syntax
+
+## Narrative Collaboration
+
+If you use Claude for narrative drafting, treat it as a prose collaborator rather than a source of canon. The working guidance is in [`docs/claude-collaboration.md`](./docs/claude-collaboration.md), and all output should be reconciled against [`AGENTS.md`](./AGENTS.md) plus the actual game state in [`story/mansion-of-ashes.tw`](./story/mansion-of-ashes.tw).
 
 ## Roadmap
 

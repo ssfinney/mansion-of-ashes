@@ -52,6 +52,7 @@ Future Codex work should preserve a serious indie-project standard: coherent str
 
 - Treat `story/mansion-of-ashes.tw` as the canonical game file.
 - Treat external narrative collaborators as contributors to prose, not continuity overrides. If Claude or another writing assistant is used for scene drafting, reconcile their output against this file's established facts, variables, and tone rules before merging.
+- Use `docs/claude-collaboration.md` when preparing narrative handoff context or reviewing Claude-generated scene work.
 - Keep docs aligned with the actual story state.
 - Do not add supernatural certainty unless explicitly requested.
 - Do not turn the caretaker into a hidden mastermind.

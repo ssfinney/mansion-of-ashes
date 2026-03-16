@@ -7,6 +7,7 @@
 - Add a second interaction beat with the caretaker before the ending to deepen ambiguity
 - Tighten wording through playtesting to keep average completion time inside 20 to 30 minutes
 - Add a hint-safe fail state or reset affordance for players who reach the basement too early
+- Prepare a scene-by-scene prose revision queue for Claude collaboration
 
 ## Content Expansion Ideas
 
