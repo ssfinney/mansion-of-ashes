@@ -38,7 +38,9 @@ The source of truth is [`story/mansion-of-ashes.tw`](./story/mansion-of-ashes.tw
 
 1. Open the story in a Twine-compatible Twee workflow such as Tweego, or import the passages into the Twine app if preferred.
 2. Edit narrative and logic in the `.tw` file.
-3. Export a playable HTML build into `build/` when needed.
+3. Build a playable HTML export with `scripts/build-story.sh`.
+
+The repository now includes a local Tweego-based build workflow. The compiler binary and story format are installed in ignored local directories (`.tools/` and `.storyformats/`) so the project can be compiled without relying on a system-wide Twine install.
 
 This repository does not depend on runtime AI generation. All state and outcomes are authored directly in SugarCube passage code.
 
@@ -50,6 +52,7 @@ This repository does not depend on runtime AI generation. All state and outcomes
 - 1 central puzzle chain: matches -> clues -> silver key -> spare fuse -> restored power -> final confrontation
 - Variable-driven trust, clue discovery, unlocked areas, and ending evaluation
 - Estimated play time: roughly 20 to 30 minutes for a first pass with optional exploration
+- Browser-playable HTML export generated at `build/mansion-of-ashes.html`
 
 ## Design Priorities
 

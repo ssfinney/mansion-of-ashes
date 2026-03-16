@@ -4,6 +4,8 @@ Thumbs.db
 # Twine / build outputs
 build/*.html
 !build/.gitkeep
+.storyformats/
+.tools/
 
 # Editor / tooling
 .vscode/

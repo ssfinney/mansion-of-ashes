@@ -5,12 +5,18 @@ The repository keeps the Twee file in `story/` as the source of truth. Exported 
 Suggested local workflow:
 
 1. Edit `story/mansion-of-ashes.tw`
-2. Export to HTML with your preferred Twine/Twee toolchain
-3. Save the generated file in `build/`, for example `build/mansion-of-ashes.html`
+2. Run `scripts/build-story.sh`
+3. Open `build/mansion-of-ashes.html`
 4. Smoke-test the build in a browser before sharing or pushing
 
-If using Tweego locally, a typical command would look like:
+The repository prefers the local Tweego setup if present. The build script compiles with the pinned SugarCube format in `.storyformats/`.
 
 ```bash
-tweego -o build/mansion-of-ashes.html story/mansion-of-ashes.tw
+scripts/build-story.sh
+```
+
+Equivalent direct command:
+
+```bash
+./.tools/tweego/tweego -f sugarcube-2 -o build/mansion-of-ashes.html story/mansion-of-ashes.tw
 ```

@@ -51,9 +51,11 @@ Future Codex work should preserve a serious indie-project standard: coherent str
 ## Future Codex Instructions
 
 - Treat `story/mansion-of-ashes.tw` as the canonical game file.
+- Treat external narrative collaborators as contributors to prose, not continuity overrides. If Claude or another writing assistant is used for scene drafting, reconcile their output against this file's established facts, variables, and tone rules before merging.
 - Keep docs aligned with the actual story state.
 - Do not add supernatural certainty unless explicitly requested.
 - Do not turn the caretaker into a hidden mastermind.
 - Preserve the existing puzzle chain unless there is a strong replacement that improves clarity and stakes.
 - If you add passages, keep passage names stable and descriptive.
 - If you export builds, place them in `build/` and avoid committing throwaway intermediate files.
+- Prefer `scripts/build-story.sh` for local compilation, which uses the repo-local Tweego and SugarCube setup when present.
