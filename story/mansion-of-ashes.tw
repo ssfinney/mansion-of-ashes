@@ -1,0 +1,251 @@
+:: StoryTitle
+Mansion of Ashes
+
+:: StoryData
+{
+  "ifid": "B9BC4FB5-220A-4824-BED5-1896D5E845A2",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "Title",
+  "zoom": 1
+}
+
+:: StoryInit
+/% Core prototype state lives here for easy extension. %/
+<<set $hasMatches = false>>
+<<set $hasSilverKey = false>>
+<<set $hasDiaryPage = false>>
+<<set $hasSpareFuse = false>>
+<<set $metCaretaker = false>>
+<<set $trustCaretaker = 0>>
+<<set $powerOn = false>>
+<<set $sawPortrait = false>>
+<<set $readLedger = false>>
+<<set $sawConservatoryReveal = false>>
+<<set $endingScore = 0>>
+
+:: Title
+The house waits in silence above a long slope of wet grass, its windows black, its upper masonry still stained by a fire that ended twelve years ago.
+
+You do not remember how you came here. You remember smoke. You remember a locked door. You remember waking in a bed that does not belong to you.
+
+This is a short Twine prototype built in SugarCube 2. Exploration, clue-gathering, and trust shape the ending.
+
+- [[Begin->Bedroom]]
+
+:: Bedroom
+You wake in a narrow bedroom under a wool blanket that smells faintly of dust and cedar. The fire has gone cold in the grate. The corridor beyond the door is unlit.
+
+On the washstand sits a porcelain basin filmed with ash. The window has been nailed shut from the outside, not recently, but not by time alone.
+
+The only clear exit is the bedroom door.
+
+- [[Step into the hallway->Hallway]]
+
+:: Hallway
+The upper hall runs the length of the mansion like a spine. Wallpaper hangs in strips. A family portrait leans crooked on the wall, its varnish blistered by old heat. At the far end, the front stair descends into darkness.
+
+<<if !$powerOn>>
+The house remains powerless. Every doorway feels provisional, as if the dark might close behind you.
+<</if>>
+
+<<if $powerOn>>
+Weak electric light hums through a few surviving fixtures. The house looks older with the dark driven back, not kinder.
+<</if>>
+
+<<if !$sawPortrait>>
+- <<link "Study the damaged portrait.">><<set $sawPortrait = true>>The canvas shows a woman seated beside a child in a winter garden. Heat has curled the paint at the frame's right edge. Behind the loosened backing, something metallic gives a soft click against wood.<</link>>
+<</if>>
+
+<<if $readLedger and !$hasSilverKey>>
+- <<link "Reach behind the portrait frame.">><<set $hasSilverKey = true>><<set $endingScore += 1>>Your fingers find a narrow silver key taped to the backing board, exactly where the ledger implied it would be.<</link>>
+<</if>>
+
+<div id="hall-actions">
+- [[Go to the kitchen->Kitchen]]
+- [[Try the study door->Study Door]]
+- [[Descend to the basement stairs->Basement Stairs]]
+<<if $hasSilverKey>>
+- [[Unlock the conservatory->Conservatory]]
+<</if>>
+<<if !$hasSilverKey>>
+- The conservatory door downstairs carries a silver lockplate.
+<</if>>
+- [[Go to the main exit->Main Exit]]
+</div>
+
+:: Kitchen
+The kitchen is all iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently, but only what was practical: the sink, the table, the knife block. Everything else wears a fine gray bloom.
+
+One drawer near the stove sticks halfway open.
+
+<<if !$hasMatches>>
+<<link "Pry the drawer open.">><<set $hasMatches = true>>Inside lies a box of kitchen matches wrapped in waxed paper, dry despite the damp in the room. You slip it into your pocket.<</link>>
+<</if>>
+
+<div id="kitchen-actions">
+The back door is bolted and swollen in its frame.
+
+- [[Return to the hallway->Hallway]]
+</div>
+
+:: Study Door
+The study door bears the worst of the old smoke stains. At first you think it is locked. Then you notice the latch has only warped in the frame.
+
+Beyond it waits a room the house has tried and failed to keep sealed.
+
+- [[Force the door and enter the study->Study]]
+- [[Go back to the hallway->Hallway]]
+
+:: Study
+Books line the walls behind wire mesh. The desk at the center of the room is ordered with the desperation of someone who has spent years arranging paper against memory.
+
+On the blotter rests a caretaker's ledger. A single page, folded twice, has been tucked beneath it.
+
+<<if !$readLedger>>
+- <<link "Read the ledger.">><<set $readLedger = true>><<set $endingScore += 1>>Most entries are practical: coal, repairs, wages deferred. One line from twelve years ago is underlined hard enough to score the page: "Silver key removed from conservatory lock and hidden behind Elise's portrait after the fire." A later note, in shakier handwriting, mentions that the spare fuse was left in the conservatory potting bench when the east wing was closed.<</link>>
+<</if>>
+
+<<if !$hasDiaryPage>>
+- <<link "Unfold the hidden page.">><<set $hasDiaryPage = true>><<set $endingScore += 1>>It is a torn diary leaf in a child's hand. "Mr. Vale said not to tell Father about the lamp. He looked so tired. I took the birdcage cloth because the glass room is cold at night." The last line trails into a smear.<</link>>
+<</if>>
+
+<div id="study-actions">
+The desk drawer hangs open, empty except for ash and a bent fountain pen.
+
+- [[Return to the hallway->Hallway]]
+</div>
+
+:: Basement Stairs
+The stone stairs sink beneath the house in a draft that smells of lime, wet soot, and old wiring. The darkness at the bottom is complete.
+
+<<if !$hasMatches>>
+Without a light source, the lower landing is only a deeper absence.
+
+- [[Retreat to the hallway->Hallway]]
+<</if>>
+
+<<if $hasMatches>>
+With the matches in your pocket, the descent looks dangerous but possible.
+
+- [[Go down to the fuse box->Fuse Box]]
+- [[Return to the hallway->Hallway]]
+<</if>>
+
+:: Fuse Box
+You strike a match. Sulfur flashes bright enough to hurt.
+
+The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown. Another socket stands empty. The handwritten label beneath it reads: `Glass Room`.
+
+<<if !$hasSpareFuse>>
+No amount of stubbornness will restore power without the missing piece.
+
+- [[Climb back to the hallway->Hallway]]
+<</if>>
+
+<<if $hasSpareFuse and !$powerOn>>
+- <<link "Fit the spare fuse and throw the main switch.">><<set $powerOn = true>>The house answers in stages: a shudder through the walls, a distant relay, then a weak bloom of light above the stair. Somewhere downstairs, a lock clicks open.<</link>>
+<</if>>
+
+<div id="fuse-actions">
+<<if $powerOn>>
+The corridor overhead is lit now. The mansion feels inhabited again, which is not the same as safe.
+<</if>>
+
+- [[Return to the hallway->Hallway]]
+</div>
+
+:: Conservatory
+The silver key turns with a dry, reluctant scrape.
+
+The conservatory opens beneath a long cracked roof of glass. Moonlight and the first dilute hint of dawn collect in the broken panes. At the far end, through a collapsed interior window, you can see the blackened shell of a nursery in the sealed east wing. A rusted birdcage hangs there, untouched by everything except time.
+
+<<if !$sawConservatoryReveal>>
+<<set $sawConservatoryReveal = true>>
+<<set $endingScore += 1>>
+The view lands with more force than the ledger did. The fire is no longer an event in a book. It is a room left open inside the house.
+<</if>>
+
+Along the wall, the potting bench has been stripped nearly bare.
+
+<<if !$hasSpareFuse>>
+- <<link "Search the potting bench drawers.">><<set $hasSpareFuse = true>>In the back of a shallow drawer, wrapped in a square of oilcloth, lies a spare ceramic fuse. Someone placed it carefully enough to be found later, or never.<</link>>
+<</if>>
+
+<div id="conservatory-actions">
+Condensation beads on dead vines trained over iron ribs. The air is colder here than the rest of the house.
+
+- [[Return to the hallway->Hallway]]
+</div>
+
+:: Main Exit
+You descend to the front door. The entrance hall is wide and stripped almost bare, leaving only the runner on the stair and a smell of extinguished smoke that no season has quite removed.
+
+<<if !$powerOn>>
+The front lock is tied into the old electrical release. The handle resists, then stops dead.
+
+Without power, the house will not let you out.
+
+- [[Go back upstairs->Hallway]]
+<</if>>
+
+<<if $powerOn>>
+The lock has released. When you draw the door inward, cold predawn air enters first.
+
+A man standing on the step lifts one hand against the light behind you. He is lean, gray at the temples, and wearing a caretaker's coat gone shiny at the seams. He looks tired before he looks startled.
+
+- [[Face the caretaker->Caretaker Encounter]]
+<</if>>
+
+:: Caretaker Encounter
+<<set $metCaretaker = true>>
+Mr. Vale lowers his hand slowly. "You found your way farther than I meant you to."
+
+His eyes flick once past you, toward the lit hall, then toward the upper floor. Not fear. Calculation, and something worse than fear because it has had twelve years to settle into him.
+
+<<if $readLedger>>
+"You kept records," you say. "Not all of them honest."
+<</if>>
+
+<<if !$readLedger>>
+"You knew someone was in the house," you say. "You left me in the dark."
+<</if>>
+
+<<if $hasDiaryPage>>
+The torn diary page is warm from your pocket.
+<</if>>
+
+<<if $hasDiaryPage>>
+- <<link "Show him the diary page and ask who he was protecting.">><<set $trustCaretaker += 1>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+<</if>>
+- <<link "Tell him the house told you enough, and wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+- <<link "Tell him to open the way and keep his lies.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
+
+:: Ending: Escape
+Mr. Vale steps aside without argument.
+
+You leave the house as dawn thins the dark over the grounds. Behind you, the mansion stands lit in only three windows, not revived so much as briefly admitted back into the world. You carry out a handful of facts, a few suspicions, and the strong sense that survival has outrun explanation.
+
+There will be time later to decide whether that is mercy or failure.
+
+- [[Play again->Title]]
+
+:: Ending: Bitter Truth
+Mr. Vale reads the diary page once and closes his eyes.
+
+"I hid the key because her father wanted the room sealed," he says at last. "After the fire, everyone wanted one clean story. A tired man. A careless lamp. No child awake and frightened enough to move through the glass room alone. I let the lie stand because I had told her to keep quiet earlier that evening. Not to protect myself from the law. To protect what remained of the family. Then the years passed, and the lie became the only thing left I knew how to tend."
+
+He unlocks the garden gate and does not ask you to absolve him. Dawn catches in the broken conservatory panes behind the house, and for the first time the ruin looks less like a mouth than a wound.
+
+You leave with the truth in pieces, but pieces can still be true.
+
+- [[Play again->Title]]
+
+:: Ending: House of Lies
+Something in Mr. Vale's expression closes before the words have finished leaving your mouth.
+
+"If that is what you need this to be," he says, and opens the gate without meeting your eyes.
+
+You go out into the paling dark with a story sharp enough to hold. It may even be the one you tell. But the house behind you remains burdened with details you refused to carry, and the difference will follow longer than the smoke on your clothes.
+
+- [[Play again->Title]]
