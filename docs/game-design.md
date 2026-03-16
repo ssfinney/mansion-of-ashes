@@ -36,6 +36,10 @@ You wake in a shuttered manor after a blackout in the hours before dawn. Parts o
 
 This chain is intentionally compact and deterministic. Optional clue gathering changes interpretation and ending quality rather than the base progression requirements.
 
+## Optional Clue Path
+
+An extra clue in the kitchen reveals a chained service door marked with a child's chalk star. This supports the reading that the house was arranged after the fire to manage guilt and silence, not only danger. It now helps unlock the strongest ending interpretation.
+
 ## Endings
 
 - Escape: leave with only partial understanding; survival takes priority over closure.

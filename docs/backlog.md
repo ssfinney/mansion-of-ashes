@@ -3,10 +3,10 @@
 ## Prioritized Improvements
 
 - Export a browser-ready HTML build into `build/`
-- Add lightweight SugarCube UI for current inventory and discovered clues
 - Expand the conservatory sequence with one more optional clue and a stronger visual set piece
 - Add a second interaction beat with the caretaker before the ending to deepen ambiguity
 - Tighten wording through playtesting to keep average completion time inside 20 to 30 minutes
+- Add a hint-safe fail state or reset affordance for players who reach the basement too early
 
 ## Content Expansion Ideas
 
@@ -21,6 +21,7 @@
 - Confirm the central puzzle can be solved without guesswork
 - Confirm players understand the silver key opens the conservatory
 - Check whether the ledger clue is strong enough to direct the portrait interaction
+- Check whether the service-door clue reads as meaningful rather than ornamental
 - Verify that endings feel earned rather than abrupt
 - Check trust-choice wording so the caretaker remains ambiguous, not sinister or saintly
 - Verify every loop back to `Hallway` remains readable and not repetitive

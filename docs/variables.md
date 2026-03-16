@@ -70,9 +70,16 @@
 - Changes: set in `Conservatory`
 - Used by: `Caretaker Encounter`
 
+## `$heardLockedDoor`
+
+- Type: boolean
+- Purpose: tracks whether the player discovered the chained service-door clue in the kitchen
+- Changes: set in `Kitchen`
+- Used by: `StoryCaption`, `Caretaker Encounter`
+
 ## `$endingScore`
 
 - Type: integer
 - Purpose: summarizes clue completeness for ending resolution
-- Changes: incremented in `Study`, `Conservatory`, and `Caretaker Encounter`
+- Changes: incremented in `Kitchen`, `Study`, `Hallway`, `Conservatory`, and `Caretaker Encounter`
 - Used by: ending routing in `Caretaker Encounter`

@@ -10,6 +10,65 @@ Mansion of Ashes
   "zoom": 1
 }
 
+:: StoryStyles [stylesheet]
+body {
+  background: #11100f;
+  color: #d8d1c3;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+#story {
+  max-width: 54rem;
+}
+
+.hud {
+  margin: 0 0 1.2rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #4b433b;
+  background: rgba(37, 31, 26, 0.72);
+  color: #cfc5b4;
+  font-size: 0.95rem;
+}
+
+.hud strong {
+  color: #f1e7d4;
+}
+
+.hud .dim {
+  color: #aa9f8f;
+}
+
+a {
+  color: #d8bc8a;
+}
+
+a:hover {
+  color: #f1d7a7;
+}
+
+:: StoryCaption
+<div class="hud">
+  <strong>Status</strong><br>
+  Inventory:
+  <<if $hasMatches>>matches<</if>><<if $hasMatches and ($hasSilverKey or $hasDiaryPage or $hasSpareFuse)>>, <</if>>
+  <<if $hasSilverKey>>silver key<</if>><<if $hasSilverKey and ($hasDiaryPage or $hasSpareFuse)>>, <</if>>
+  <<if $hasDiaryPage>>diary page<</if>><<if $hasDiaryPage and $hasSpareFuse>>, <</if>>
+  <<if $hasSpareFuse>>spare fuse<</if>>
+  <<if !$hasMatches and !$hasSilverKey and !$hasDiaryPage and !$hasSpareFuse>><span class="dim">nothing useful yet</span><</if>>
+  <br>
+  House:
+  <<if $powerOn>>power restored<</if>><<if !$powerOn>><span class="dim">still dark</span><</if>>
+  <br>
+  Clues:
+  <<set _clueCount = 0>>
+  <<if $sawPortrait>><<set _clueCount += 1>><</if>>
+  <<if $readLedger>><<set _clueCount += 1>><</if>>
+  <<if $hasDiaryPage>><<set _clueCount += 1>><</if>>
+  <<if $sawConservatoryReveal>><<set _clueCount += 1>><</if>>
+  <<if $heardLockedDoor>><<set _clueCount += 1>><</if>>
+  <<= _clueCount>> found
+</div>
+
 :: StoryInit
 /% Core prototype state lives here for easy extension. %/
 <<set $hasMatches = false>>
@@ -22,6 +81,7 @@ Mansion of Ashes
 <<set $sawPortrait = false>>
 <<set $readLedger = false>>
 <<set $sawConservatoryReveal = false>>
+<<set $heardLockedDoor = false>>
 <<set $endingScore = 0>>
 
 :: Title
@@ -85,6 +145,10 @@ One drawer near the stove sticks halfway open.
 
 <div id="kitchen-actions">
 The back door is bolted and swollen in its frame.
+
+<<if !$heardLockedDoor>>
+- <<link "Listen at the pantry service door.">><<set $heardLockedDoor = true>><<set $endingScore += 1>>At first you hear nothing. Then, from the other side of the narrow service passage, the faintest knock: two measured taps through old wood. When you ease the warped pantry door an inch, you glimpse the chain fastened from this side and a child's chalk star drawn low on the panel, preserved under soot. Mr. Vale did not lock every door against intruders. Some were meant to keep grief contained.<</link>>
+<</if>>
 
 - [[Return to the hallway->Hallway]]
 </div>
@@ -215,10 +279,14 @@ His eyes flick once past you, toward the lit hall, then toward the upper floor. 
 The torn diary page is warm from your pocket.
 <</if>>
 
-<<if $hasDiaryPage>>
-- <<link "Show him the diary page and ask who he was protecting.">><<set $trustCaretaker += 1>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+<<if $heardLockedDoor>>
+You remember the chalk star on the chained service door, placed at a child's height.
 <</if>>
-- <<link "Tell him the house told you enough, and wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+
+<<if $hasDiaryPage>>
+- <<link "Show him the diary page and ask who he was protecting.">><<set $trustCaretaker += 1>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+<</if>>
+- <<link "Tell him the house told you enough, and wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
 - <<link "Tell him to open the way and keep his lies.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
 
 :: Ending: Escape

@@ -25,6 +25,7 @@
 From `Hallway`, the player can circulate through:
 
 - `Kitchen` to secure matches
+- `Kitchen` to discover an optional service-door clue that sharpens the ending context
 - `Study Door -> Study` to read the ledger and recover the diary page
 - `Basement Stairs -> Fuse Box` to learn a fuse is missing and later restore power
 - portrait interaction in `Hallway` to claim the silver key after reading the ledger
@@ -37,5 +38,5 @@ From `Hallway`, the player can circulate through:
 
 - Exploration branches reconverge through `Hallway`, which acts as the structural hub.
 - The study and conservatory each gate one piece of the same core puzzle instead of creating separate quest lines.
-- The optional diary-page clue does not create a new branch; it enriches the confrontation and ending evaluation.
+- The diary-page and service-door clues do not create new branches; they enrich the confrontation and ending evaluation.
 - Endings diverge late, keeping the playable prototype compact while making earlier choices matter.
