@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+# Twine / build outputs
+build/*.html
+!build/.gitkeep
+
+# Editor / tooling
+.vscode/
+.idea/
+*.swp
+*.swo
