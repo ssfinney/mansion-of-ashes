@@ -157,7 +157,7 @@ You do not remember how you came here. You remember smoke. You remember a locked
 
 <hr class="scene-break">
 
-[[Begin→Bedroom]]
+[[Begin->Bedroom]]
 
 :: Bedroom
 You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
@@ -166,7 +166,7 @@ The washstand holds a porcelain basin filmed with ash. The window has been naile
 
 The only clear way out is the door.
 
-[[Step into the hallway→Hallway]]
+[[Step into the hallway->Hallway]]
 
 :: Hallway
 <<if $powerOn>>
@@ -180,7 +180,7 @@ Wallpaper hangs in long strips. Near the head of the stair, a family portrait ti
 <hr class="scene-break">
 
 <span id="portrait-zone"><<if !$sawPortrait>>\
-[[Examine the portrait.→Hallway-Portrait]]\
+[[Examine the portrait.->Hallway-Portrait]]\
 <<elseif !$hasSilverKey and $readLedger>>\
 The portrait shows a woman and child — and something hard behind the frame. <<link "Retrieve the silver key.">><<set $hasSilverKey = true>><<set $endingScore += 1>><<replace "#portrait-zone">><span class="reveal-text">Your fingers find a narrow silver key taped to the backing board, exactly where the ledger said it would be.</span><</replace>><</link>>\
 <<else>>\
@@ -189,13 +189,13 @@ The portrait shows a woman seated beside a child in a winter garden. The heat da
 
 <hr class="scene-break">
 
-- [[Go to the kitchen→Kitchen]]
-- [[Try the study door→Study Door]]
-- [[Go down to the basement→Basement Stairs]]
-<<if $hasSilverKey>>- [[Unlock the conservatory→Conservatory]]
+- [[Go to the kitchen->Kitchen]]
+- [[Try the study door->Study Door]]
+- [[Go down to the basement->Basement Stairs]]
+<<if $hasSilverKey>>- [[Unlock the conservatory->Conservatory]]
 <<else>>- //The conservatory door carries a silver lockplate you cannot open.//
 <</if>>
-- [[Go to the main exit→Main Exit]]
+- [[Go to the main exit->Main Exit]]
 
 :: Hallway-Portrait
 <<set $sawPortrait = true>>
@@ -210,7 +210,7 @@ You know exactly what it is.
 <span id="key-retrieve"></span>
 <</if>>
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 
 :: Kitchen
 The kitchen is iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom.
@@ -235,15 +235,15 @@ The back door is bolted and swollen in its frame. Beside it, a narrow service pa
 
 <hr class="scene-break">
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 
 :: Study Door
 The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. At first you assume it is locked. Then you notice the latch has simply warped in the frame.
 
 Beyond it waits a room the house has tried and failed to keep sealed.
 
-- [[Force the door open→Study]]
-- [[Return to the hallway→Hallway]]
+- [[Force the door open->Study]]
+- [[Return to the hallway->Hallway]]
 
 :: Study
 Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
@@ -268,7 +268,7 @@ On the blotter rests a caretaker's ledger. Beneath it, a folded page.
 
 The desk drawer hangs open — empty except for ash and a bent fountain pen.
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 
 :: Basement Stairs
 Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
@@ -276,12 +276,12 @@ Stone stairs drop beneath the house in a cold draft that smells of lime and old 
 <<if !$hasMatches>>
 Without a light source, the lower landing is only a deeper absence. You would not find the fuse cabinet blind.
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 <<else>>
 You have matches. The descent looks precarious but manageable.
 
-- [[Go down to the fuse box→Fuse Box]]
-- [[Return to the hallway→Hallway]]
+- [[Go down to the fuse box->Fuse Box]]
+- [[Return to the hallway->Hallway]]
 <</if>>
 
 :: Fuse Box
@@ -299,7 +299,7 @@ Without a replacement fuse, the circuit stays broken. The ledger mentioned where
 
 <hr class="scene-break">
 
-[[Climb back to the hallway→Hallway]]
+[[Climb back to the hallway->Hallway]]
 
 :: Conservatory
 The silver key turns with a dry, reluctant scrape.
@@ -325,7 +325,7 @@ Dead vines are trained over iron ribs. The air is colder here than anywhere else
 
 <hr class="scene-break">
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 
 :: Main Exit
 The entrance hall is wide and stripped nearly bare — only the runner on the stair, and a smell of extinguished smoke that no season has quite removed.
@@ -335,17 +335,18 @@ The front lock is tied into the old electrical release. The handle turns half an
 
 Without power, the house will not let you out.
 
-[[Return to the hallway→Hallway]]
+[[Return to the hallway->Hallway]]
 <<else>>
 The lock has released.
 
 When you draw the door inward, cold predawn air enters first. Then you see the man standing on the step — lean, gray at the temples, wearing a caretaker's coat gone shiny at the seams. He lifts one hand against the light behind you. He looks tired before he looks startled.
 
-[[Face the caretaker→Caretaker Encounter]]
+[[Face the caretaker->Caretaker Encounter]]
 <</if>>
 
 :: Caretaker Encounter
 <<set $metCaretaker = true>>
+<<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>
 
 Mr. Vale lowers his hand slowly. He does not ask how you found your way inside. His eyes move once past you toward the lit hall, then toward the upper floor. Not fear — something that has had twelve years to settle into calculation.
 
@@ -364,9 +365,9 @@ You think of the chalk star on the chained service door — placed at a child's 
 <hr class="scene-break">
 
 <<if $hasDiaryPage>>
-- <<link "Show him the diary page. Ask who he was protecting.">><<set $trustCaretaker += 2>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+- <<link "Show him the diary page. Ask who he was protecting.">><<set $trustCaretaker += 2>><<set $endingScore += 1>><<if _fullTruth>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
 <</if>>
-- <<link "Tell him the house has already said enough. Wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+- <<link "Tell him the house has already said enough. Wait for the rest.">><<set $trustCaretaker += 1>><<if _fullTruth>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
 - <<link "Tell him to open the gate and keep his reasons.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
 
 :: Ending: Escape
@@ -380,7 +381,7 @@ You carry out a set of facts, a larger set of suspicions, and the clear sense th
 
 <hr class="scene-break">
 
-[[Play again→Title]]
+[[Play again->Title]]
 
 :: Ending: Bitter Truth
 <div class="ending-title">Ending — The Bitter Truth</div>
@@ -395,7 +396,7 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 
 <hr class="scene-break">
 
-[[Play again→Title]]
+[[Play again->Title]]
 
 :: Ending: House of Lies
 <div class="ending-title">Ending — House of Lies</div>
@@ -408,4 +409,4 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 
 <hr class="scene-break">
 
-[[Play again→Title]]
+[[Play again->Title]]
