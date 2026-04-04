@@ -15,305 +15,397 @@ body {
   background: #11100f;
   color: #d8d1c3;
   font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.7;
 }
 
 #story {
-  max-width: 54rem;
+  max-width: 52rem;
+}
+
+#passages {
+  padding: 2rem 1.5rem;
+}
+
+.passage {
+  font-size: 1.05rem;
 }
 
 .hud {
-  margin: 0 0 1.2rem;
-  padding: 0.85rem 1rem;
-  border: 1px solid #4b433b;
-  background: rgba(37, 31, 26, 0.72);
-  color: #cfc5b4;
-  font-size: 0.95rem;
+  margin: 0 0 1.4rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid #3d3530;
+  background: rgba(30, 24, 20, 0.80);
+  color: #b8af9f;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }
 
-.hud strong {
-  color: #f1e7d4;
+.hud-label {
+  color: #8a7f72;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
 }
 
-.hud .dim {
-  color: #aa9f8f;
+.hud-value {
+  color: #d4c8b4;
 }
 
-a {
-  color: #d8bc8a;
+.hud-dim {
+  color: #5a5248;
+  font-style: italic;
 }
 
-a:hover {
-  color: #f1d7a7;
+.hud-row {
+  margin-bottom: 0.2rem;
+}
+
+hr.scene-break {
+  border: none;
+  border-top: 1px solid #3d3530;
+  margin: 1.4rem 0;
+}
+
+a.link-internal {
+  color: #c8a96e;
+  text-decoration: none;
+}
+
+a.link-internal:hover {
+  color: #e8c98e;
+  text-decoration: underline;
+}
+
+.reveal-text {
+  color: #cfc4b0;
+  font-style: italic;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.ending-title {
+  font-size: 1.1rem;
+  color: #8a7f72;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
 }
 
 :: StoryCaption
 <div class="hud">
-  <strong>Status</strong><br>
-  Inventory:
-  <<if $hasMatches>>matches<</if>><<if $hasMatches and ($hasSilverKey or $hasDiaryPage or $hasSpareFuse)>>, <</if>>
-  <<if $hasSilverKey>>silver key<</if>><<if $hasSilverKey and ($hasDiaryPage or $hasSpareFuse)>>, <</if>>
-  <<if $hasDiaryPage>>diary page<</if>><<if $hasDiaryPage and $hasSpareFuse>>, <</if>>
-  <<if $hasSpareFuse>>spare fuse<</if>>
-  <<if !$hasMatches and !$hasSilverKey and !$hasDiaryPage and !$hasSpareFuse>><span class="dim">nothing useful yet</span><</if>>
-  <br>
-  House:
-  <<if $powerOn>>power restored<</if>><<if !$powerOn>><span class="dim">still dark</span><</if>>
-  <br>
-  Clues:
-  <<set _clueCount = 0>>
-  <<if $sawPortrait>><<set _clueCount += 1>><</if>>
-  <<if $readLedger>><<set _clueCount += 1>><</if>>
-  <<if $hasDiaryPage>><<set _clueCount += 1>><</if>>
-  <<if $sawConservatoryReveal>><<set _clueCount += 1>><</if>>
-  <<if $heardLockedDoor>><<set _clueCount += 1>><</if>>
-  <<= _clueCount>> found
+  <div class="hud-row">
+    <span class="hud-label">Inventory</span><br>
+    <span class="hud-value">
+      <<set _inv = []>>
+      <<if $hasMatches>><<run _inv.push("matches")>><</if>>
+      <<if $hasSilverKey>><<run _inv.push("silver key")>><</if>>
+      <<if $hasDiaryPage>><<run _inv.push("diary page")>><</if>>
+      <<if $hasSpareFuse>><<run _inv.push("spare fuse")>><</if>>
+      <<if _inv.length > 0>>
+        <<= _inv.join(", ")>>
+      <<else>>
+        <span class="hud-dim">nothing yet</span>
+      <</if>>
+    </span>
+  </div>
+  <div class="hud-row">
+    <span class="hud-label">House</span>
+    <span class="hud-value">
+      <<if $powerOn>> power restored<<else>> <span class="hud-dim">dark</span><</if>>
+    </span>
+  </div>
+  <div class="hud-row">
+    <span class="hud-label">Clues</span>
+    <span class="hud-value">
+      <<set _c = 0>>
+      <<if $readLedger>><<set _c += 1>><</if>>
+      <<if $hasDiaryPage>><<set _c += 1>><</if>>
+      <<if $hasSilverKey>><<set _c += 1>><</if>>
+      <<if $heardLockedDoor>><<set _c += 1>><</if>>
+      <<if $sawConservatoryReveal>><<set _c += 1>><</if>>
+      <<= _c>> / 5
+    </span>
+  </div>
 </div>
 
 :: StoryInit
-/% Core prototype state lives here for easy extension. %/
-<<set $hasMatches = false>>
-<<set $hasSilverKey = false>>
-<<set $hasDiaryPage = false>>
-<<set $hasSpareFuse = false>>
-<<set $metCaretaker = false>>
-<<set $trustCaretaker = 0>>
-<<set $powerOn = false>>
-<<set $sawPortrait = false>>
-<<set $readLedger = false>>
+<<set $hasMatches         = false>>
+<<set $hasSilverKey       = false>>
+<<set $hasDiaryPage       = false>>
+<<set $hasSpareFuse       = false>>
+<<set $metCaretaker       = false>>
+<<set $trustCaretaker     = 0>>
+<<set $powerOn            = false>>
+<<set $sawPortrait        = false>>
+<<set $readLedger         = false>>
 <<set $sawConservatoryReveal = false>>
-<<set $heardLockedDoor = false>>
-<<set $endingScore = 0>>
+<<set $heardLockedDoor    = false>>
+<<set $endingScore        = 0>>
 
 :: Title
-The house waits in silence above a long slope of wet grass, its windows black, its upper masonry still stained by a fire that ended twelve years ago.
+<div style="text-align:center; padding: 2rem 0 1rem;">
+<p style="font-size:0.85rem; letter-spacing:0.18em; color:#6b6058; text-transform:uppercase;">A short mystery</p>
+<h1 style="font-size:2rem; color:#d4c8b4; margin:0.4rem 0;">Mansion of Ashes</h1>
+<p style="color:#7a7060; font-size:0.9rem;">20–25 minutes &nbsp;·&nbsp; three endings &nbsp;·&nbsp; SugarCube 2</p>
+</div>
 
-You do not remember how you came here. You remember smoke. You remember a locked door. You remember waking in a bed that does not belong to you.
+<hr class="scene-break">
 
-This is a short Twine prototype built in SugarCube 2. Exploration, clue-gathering, and trust shape the ending.
+The house waits above a long slope of wet grass, its windows black, its upper masonry still stained from a fire that ended twelve years ago.
 
-- [[Begin->Bedroom]]
+You do not remember how you came here. You remember smoke. You remember a locked door. You remember waking in a bed that is not yours.
+
+<hr class="scene-break">
+
+[[Begin→Bedroom]]
 
 :: Bedroom
-You wake in a narrow bedroom under a wool blanket that smells faintly of dust and cedar. The fire has gone cold in the grate. The corridor beyond the door is unlit.
+You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
 
-On the washstand sits a porcelain basin filmed with ash. The window has been nailed shut from the outside, not recently, but not by time alone.
+The washstand holds a porcelain basin filmed with ash. The window has been nailed shut from the outside — not recently, but not by time alone. Something deliberate.
 
-The only clear exit is the bedroom door.
+The only clear way out is the door.
 
-- [[Step into the hallway->Hallway]]
+[[Step into the hallway→Hallway]]
 
 :: Hallway
-The upper hall runs the length of the mansion like a spine. Wallpaper hangs in strips. A family portrait leans crooked on the wall, its varnish blistered by old heat. At the far end, the front stair descends into darkness.
-
-<<if !$powerOn>>
-The house remains powerless. Every doorway feels provisional, as if the dark might close behind you.
-<</if>>
-
 <<if $powerOn>>
-Weak electric light hums through a few surviving fixtures. The house looks older with the dark driven back, not kinder.
+Weak electric light hums through the surviving fixtures. The hall looks older with the dark driven back, not kinder.
+<<else>>
+The upper hall runs the length of the house like a spine. Without power, every doorway feels provisional — as though the dark might close behind you.
 <</if>>
 
-<<if !$sawPortrait>>
-- <<link "Study the damaged portrait.">><<set $sawPortrait = true>>The canvas shows a woman seated beside a child in a winter garden. Heat has curled the paint at the frame's right edge. Behind the loosened backing, something metallic gives a soft click against wood.<</link>>
+Wallpaper hangs in long strips. Near the head of the stair, a family portrait tilts on its hook, varnish blistered at the lower right corner by old heat.
+
+<hr class="scene-break">
+
+<span id="portrait-zone"><<if !$sawPortrait>>\
+[[Examine the portrait.→Hallway-Portrait]]\
+<<elseif !$hasSilverKey and $readLedger>>\
+The portrait shows a woman and child — and something hard behind the frame. <<link "Retrieve the silver key.">><<set $hasSilverKey = true>><<set $endingScore += 1>><<replace "#portrait-zone">><span class="reveal-text">Your fingers find a narrow silver key taped to the backing board, exactly where the ledger said it would be.</span><</replace>><</link>>\
+<<else>>\
+The portrait shows a woman seated beside a child in a winter garden. The heat damage stops just short of the child's face.\
+<</if>></span>
+
+<hr class="scene-break">
+
+- [[Go to the kitchen→Kitchen]]
+- [[Try the study door→Study Door]]
+- [[Go down to the basement→Basement Stairs]]
+<<if $hasSilverKey>>- [[Unlock the conservatory→Conservatory]]
+<<else>>- //The conservatory door carries a silver lockplate you cannot open.//
+<</if>>
+- [[Go to the main exit→Main Exit]]
+
+:: Hallway-Portrait
+<<set $sawPortrait = true>>
+
+The canvas shows a woman seated beside a child in a winter garden. The painter gave the child a red coat. Heat has curled the paint at the frame's right edge, and when you press lightly, something rigid shifts behind the loosened backing.
+
+<<if $readLedger>>
+You know exactly what it is.
+
+<<link "Retrieve the silver key.">><<set $hasSilverKey = true>><<set $endingScore += 1>><<replace "#key-retrieve">><span class="reveal-text">A narrow silver key, taped to the backing board. The ledger was precise.</span><</replace>><</link>>
+
+<span id="key-retrieve"></span>
 <</if>>
 
-<<if $readLedger and !$hasSilverKey>>
-- <<link "Reach behind the portrait frame.">><<set $hasSilverKey = true>><<set $endingScore += 1>>Your fingers find a narrow silver key taped to the backing board, exactly where the ledger implied it would be.<</link>>
-<</if>>
-
-<div id="hall-actions">
-- [[Go to the kitchen->Kitchen]]
-- [[Try the study door->Study Door]]
-- [[Descend to the basement stairs->Basement Stairs]]
-<<if $hasSilverKey>>
-- [[Unlock the conservatory->Conservatory]]
-<</if>>
-<<if !$hasSilverKey>>
-- The conservatory door downstairs carries a silver lockplate.
-<</if>>
-- [[Go to the main exit->Main Exit]]
-</div>
+[[Return to the hallway→Hallway]]
 
 :: Kitchen
-The kitchen is all iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently, but only what was practical: the sink, the table, the knife block. Everything else wears a fine gray bloom.
+The kitchen is iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom.
 
-One drawer near the stove sticks halfway open.
+A drawer near the stove hangs half-open.
 
-<<if !$hasMatches>>
-<<link "Pry the drawer open.">><<set $hasMatches = true>>Inside lies a box of kitchen matches wrapped in waxed paper, dry despite the damp in the room. You slip it into your pocket.<</link>>
-<</if>>
+<span id="matches-zone"><<if !$hasMatches>>\
+<<link "Pry the drawer open.">><<set $hasMatches = true>><<replace "#matches-zone">><span class="reveal-text">A box of kitchen matches wrapped in waxed paper, dry despite the damp. You pocket it.</span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The open drawer holds nothing more useful.</span>\
+<</if>></span>
 
-<div id="kitchen-actions">
-The back door is bolted and swollen in its frame.
+<hr class="scene-break">
 
-<<if !$heardLockedDoor>>
-- <<link "Listen at the pantry service door.">><<set $heardLockedDoor = true>><<set $endingScore += 1>>At first you hear nothing. Then, from the other side of the narrow service passage, the faintest knock: two measured taps through old wood. When you ease the warped pantry door an inch, you glimpse the chain fastened from this side and a child's chalk star drawn low on the panel, preserved under soot. Mr. Vale did not lock every door against intruders. Some were meant to keep grief contained.<</link>>
-<</if>>
+The back door is bolted and swollen in its frame. Beside it, a narrow service passage leads to the pantry.
 
-- [[Return to the hallway->Hallway]]
-</div>
+<span id="pantry-zone"><<if !$heardLockedDoor>>\
+<<link "Listen at the pantry service door.">><<set $heardLockedDoor = true>><<set $endingScore += 1>><<replace "#pantry-zone">><span class="reveal-text">At first, nothing. Then two measured taps through the wood — slow, deliberate. When you ease the warped door an inch, you see a chain fastened from this side and a chalk star drawn low on the panel at a child's height, preserved under soot. Not every lock in this house was set against intruders. Some were meant to keep grief contained.</span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The chained service door stands as you left it. The chalk star is still there, faint and deliberate.</span>\
+<</if>></span>
+
+<hr class="scene-break">
+
+[[Return to the hallway→Hallway]]
 
 :: Study Door
-The study door bears the worst of the old smoke stains. At first you think it is locked. Then you notice the latch has only warped in the frame.
+The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. At first you assume it is locked. Then you notice the latch has simply warped in the frame.
 
 Beyond it waits a room the house has tried and failed to keep sealed.
 
-- [[Force the door and enter the study->Study]]
-- [[Go back to the hallway->Hallway]]
+- [[Force the door open→Study]]
+- [[Return to the hallway→Hallway]]
 
 :: Study
-Books line the walls behind wire mesh. The desk at the center of the room is ordered with the desperation of someone who has spent years arranging paper against memory.
+Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
 
-On the blotter rests a caretaker's ledger. A single page, folded twice, has been tucked beneath it.
+On the blotter rests a caretaker's ledger. Beneath it, a folded page.
 
-<<if !$readLedger>>
-- <<link "Read the ledger.">><<set $readLedger = true>><<set $endingScore += 1>>Most entries are practical: coal, repairs, wages deferred. One line from twelve years ago is underlined hard enough to score the page: "Silver key removed from conservatory lock and hidden behind Elise's portrait after the fire." A later note, in shakier handwriting, mentions that the spare fuse was left in the conservatory potting bench when the east wing was closed.<</link>>
-<</if>>
+<hr class="scene-break">
 
-<<if !$hasDiaryPage>>
-- <<link "Unfold the hidden page.">><<set $hasDiaryPage = true>><<set $endingScore += 1>>It is a torn diary leaf in a child's hand. "Mr. Vale said not to tell Father about the lamp. He looked so tired. I took the birdcage cloth because the glass room is cold at night." The last line trails into a smear.<</link>>
-<</if>>
+<span id="ledger-zone"><<if !$readLedger>>\
+<<link "Read the ledger.">><<set $readLedger = true>><<set $endingScore += 1>><<replace "#ledger-zone">><span class="reveal-text">Most entries are practical: coal deliveries, wages deferred, repairs noted and postponed. One line from twelve years ago has been underlined hard enough to score the page: <em>"Silver key removed from conservatory lock and hidden behind Elise's portrait after the fire."</em> A later entry, in shakier handwriting: <em>"Spare fuse left in conservatory potting bench when east wing was closed."</em></span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The ledger lies open where you left it. That underlined entry has not changed.</span>\
+<</if>></span>
 
-<div id="study-actions">
-The desk drawer hangs open, empty except for ash and a bent fountain pen.
+<span id="diary-zone"><<if !$hasDiaryPage>>\
+<<link "Unfold the hidden page.">><<set $hasDiaryPage = true>><<set $endingScore += 1>><<replace "#diary-zone">><span class="reveal-text">A torn diary leaf in a child's handwriting. <em>"Mr. Vale said not to tell Father about the lamp. He looked so tired. I took the birdcage cloth because the glass room is cold at night."</em> The last line trails into a smear that may have been a word.</span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The diary page lies where you placed it. The ink smear at the end still reads like an unfinished sentence.</span>\
+<</if>></span>
 
-- [[Return to the hallway->Hallway]]
-</div>
+<hr class="scene-break">
+
+The desk drawer hangs open — empty except for ash and a bent fountain pen.
+
+[[Return to the hallway→Hallway]]
 
 :: Basement Stairs
-The stone stairs sink beneath the house in a draft that smells of lime, wet soot, and old wiring. The darkness at the bottom is complete.
+Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
 
 <<if !$hasMatches>>
-Without a light source, the lower landing is only a deeper absence.
+Without a light source, the lower landing is only a deeper absence. You would not find the fuse cabinet blind.
 
-- [[Retreat to the hallway->Hallway]]
-<</if>>
+[[Return to the hallway→Hallway]]
+<<else>>
+You have matches. The descent looks precarious but manageable.
 
-<<if $hasMatches>>
-With the matches in your pocket, the descent looks dangerous but possible.
-
-- [[Go down to the fuse box->Fuse Box]]
-- [[Return to the hallway->Hallway]]
+- [[Go down to the fuse box→Fuse Box]]
+- [[Return to the hallway→Hallway]]
 <</if>>
 
 :: Fuse Box
-You strike a match. Sulfur flashes bright enough to hurt.
+You strike a match. Sulfur flares bright enough to make you blink.
 
-The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown. Another socket stands empty. The handwritten label beneath it reads: `Glass Room`.
+The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown — the socket beside it is simply empty, its label reading //Glass Room// in faded ink.
 
-<<if !$hasSpareFuse>>
-No amount of stubbornness will restore power without the missing piece.
+<span id="fuse-zone"><<if $hasSpareFuse and !$powerOn>>\
+<<link "Fit the spare fuse and throw the main switch.">><<set $powerOn = true>><<replace "#fuse-zone">><span class="reveal-text">The house answers in stages: a shudder through the walls, a distant relay click, then a weak bloom of electric light above the stair. Somewhere in the entrance hall, a lock releases.</span><</replace>><</link>>\
+<<elseif !$hasSpareFuse>>\
+Without a replacement fuse, the circuit stays broken. The ledger mentioned where one was left.\
+<<else>>\
+<span class="hud-dim">Power has been restored. The main switch is thrown.</span>\
+<</if>></span>
 
-- [[Climb back to the hallway->Hallway]]
-<</if>>
+<hr class="scene-break">
 
-<<if $hasSpareFuse and !$powerOn>>
-- <<link "Fit the spare fuse and throw the main switch.">><<set $powerOn = true>>The house answers in stages: a shudder through the walls, a distant relay, then a weak bloom of light above the stair. Somewhere downstairs, a lock clicks open.<</link>>
-<</if>>
-
-<div id="fuse-actions">
-<<if $powerOn>>
-The corridor overhead is lit now. The mansion feels inhabited again, which is not the same as safe.
-<</if>>
-
-- [[Return to the hallway->Hallway]]
-</div>
+[[Climb back to the hallway→Hallway]]
 
 :: Conservatory
 The silver key turns with a dry, reluctant scrape.
 
-The conservatory opens beneath a long cracked roof of glass. Moonlight and the first dilute hint of dawn collect in the broken panes. At the far end, through a collapsed interior window, you can see the blackened shell of a nursery in the sealed east wing. A rusted birdcage hangs there, untouched by everything except time.
-
 <<if !$sawConservatoryReveal>>
 <<set $sawConservatoryReveal = true>>
 <<set $endingScore += 1>>
-The view lands with more force than the ledger did. The fire is no longer an event in a book. It is a room left open inside the house.
 <</if>>
 
-Along the wall, the potting bench has been stripped nearly bare.
+The conservatory opens beneath a long cracked ceiling of glass. Moonlight and the first dilute suggestion of dawn collect in the broken panes. At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery. A rusted birdcage hangs there, untouched by everything except time.
 
-<<if !$hasSpareFuse>>
-- <<link "Search the potting bench drawers.">><<set $hasSpareFuse = true>>In the back of a shallow drawer, wrapped in a square of oilcloth, lies a spare ceramic fuse. Someone placed it carefully enough to be found later, or never.<</link>>
-<</if>>
+The fire is no longer an event in a ledger. It is a room left open inside the house.
 
-<div id="conservatory-actions">
-Condensation beads on dead vines trained over iron ribs. The air is colder here than the rest of the house.
+<hr class="scene-break">
 
-- [[Return to the hallway->Hallway]]
-</div>
+Dead vines are trained over iron ribs. The air is colder here than anywhere else in the building.
+
+<span id="conservatory-fuse-zone"><<if !$hasSpareFuse>>\
+<<link "Search the potting bench.">><<set $hasSpareFuse = true>><<replace "#conservatory-fuse-zone">><span class="reveal-text">In the back of a shallow drawer, wrapped in a square of oilcloth, a spare ceramic fuse. Someone placed it carefully enough to be found later — or never.</span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The potting bench drawer is open where you searched it.</span>\
+<</if>></span>
+
+<hr class="scene-break">
+
+[[Return to the hallway→Hallway]]
 
 :: Main Exit
-You descend to the front door. The entrance hall is wide and stripped almost bare, leaving only the runner on the stair and a smell of extinguished smoke that no season has quite removed.
+The entrance hall is wide and stripped nearly bare — only the runner on the stair, and a smell of extinguished smoke that no season has quite removed.
 
 <<if !$powerOn>>
-The front lock is tied into the old electrical release. The handle resists, then stops dead.
+The front lock is tied into the old electrical release. The handle turns half an inch and stops.
 
 Without power, the house will not let you out.
 
-- [[Go back upstairs->Hallway]]
-<</if>>
+[[Return to the hallway→Hallway]]
+<<else>>
+The lock has released.
 
-<<if $powerOn>>
-The lock has released. When you draw the door inward, cold predawn air enters first.
+When you draw the door inward, cold predawn air enters first. Then you see the man standing on the step — lean, gray at the temples, wearing a caretaker's coat gone shiny at the seams. He lifts one hand against the light behind you. He looks tired before he looks startled.
 
-A man standing on the step lifts one hand against the light behind you. He is lean, gray at the temples, and wearing a caretaker's coat gone shiny at the seams. He looks tired before he looks startled.
-
-- [[Face the caretaker->Caretaker Encounter]]
+[[Face the caretaker→Caretaker Encounter]]
 <</if>>
 
 :: Caretaker Encounter
 <<set $metCaretaker = true>>
-Mr. Vale lowers his hand slowly. "You found your way farther than I meant you to."
 
-His eyes flick once past you, toward the lit hall, then toward the upper floor. Not fear. Calculation, and something worse than fear because it has had twelve years to settle into him.
+Mr. Vale lowers his hand slowly. He does not ask how you found your way inside. His eyes move once past you toward the lit hall, then toward the upper floor. Not fear — something that has had twelve years to settle into calculation.
+
+"You found your way farther than I meant you to," he says.
 
 <<if $readLedger>>
 "You kept records," you say. "Not all of them honest."
-<</if>>
-
-<<if !$readLedger>>
-"You knew someone was in the house," you say. "You left me in the dark."
-<</if>>
-
-<<if $hasDiaryPage>>
-The torn diary page is warm from your pocket.
+<<else>>
+"You knew someone was in the house," you say. "You left me here in the dark."
 <</if>>
 
 <<if $heardLockedDoor>>
-You remember the chalk star on the chained service door, placed at a child's height.
+You think of the chalk star on the chained service door — placed at a child's height, still there under the soot.
 <</if>>
+
+<hr class="scene-break">
 
 <<if $hasDiaryPage>>
-- <<link "Show him the diary page and ask who he was protecting.">><<set $trustCaretaker += 1>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+- <<link "Show him the diary page. Ask who he was protecting.">><<set $trustCaretaker += 2>><<set $endingScore += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
 <</if>>
-- <<link "Tell him the house told you enough, and wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor and $trustCaretaker > 0>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
-- <<link "Tell him to open the way and keep his lies.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
+- <<link "Tell him the house has already said enough. Wait for the rest.">><<set $trustCaretaker += 1>><<if $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>><</link>>
+- <<link "Tell him to open the gate and keep his reasons.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
 
 :: Ending: Escape
+<div class="ending-title">Ending — Escape</div>
+
 Mr. Vale steps aside without argument.
 
-You leave the house as dawn thins the dark over the grounds. Behind you, the mansion stands lit in only three windows, not revived so much as briefly admitted back into the world. You carry out a handful of facts, a few suspicions, and the strong sense that survival has outrun explanation.
+You leave the house as dawn thins the dark above the grounds. Behind you, the mansion holds its lit windows like a man holding his breath — not revived so much as briefly permitted back into the world.
 
-There will be time later to decide whether that is mercy or failure.
+You carry out a set of facts, a larger set of suspicions, and the clear sense that survival has outrun explanation. There will be time later to decide whether that is mercy or failure. For now the wet grass is cold under your feet, and the gate stands open, and the road does not ask what you understood.
 
-- [[Play again->Title]]
+<hr class="scene-break">
+
+[[Play again→Title]]
 
 :: Ending: Bitter Truth
-Mr. Vale reads the diary page once and closes his eyes.
+<div class="ending-title">Ending — The Bitter Truth</div>
 
-"I hid the key because her father wanted the room sealed," he says at last. "After the fire, everyone wanted one clean story. A tired man. A careless lamp. No child awake and frightened enough to move through the glass room alone. I let the lie stand because I had told her to keep quiet earlier that evening. Not to protect myself from the law. To protect what remained of the family. Then the years passed, and the lie became the only thing left I knew how to tend."
+Mr. Vale reads the diary page once. He reads it again. Then he closes his eyes.
 
-He unlocks the garden gate and does not ask you to absolve him. Dawn catches in the broken conservatory panes behind the house, and for the first time the ruin looks less like a mouth than a wound.
+"I hid the key because her father wanted the room sealed," he says at last. "After the fire, everyone needed one clean story. A tired man. A careless lamp. No child awake and frightened enough to move through the glass room alone at night. I let the lie stand because I had told her to be quiet earlier that evening — not to protect myself from the law, but to protect what remained of the family's ability to go on. Then the years passed and the lie became the only thing I knew how to tend."
 
-You leave with the truth in pieces, but pieces can still be true.
+He unlocks the garden gate and does not ask you to absolve him.
 
-- [[Play again->Title]]
+Dawn catches in the broken conservatory panes above the east wing, and for the first time the ruin looks less like a mouth than a wound. You leave with the truth in pieces. Pieces can still be true.
+
+<hr class="scene-break">
+
+[[Play again→Title]]
 
 :: Ending: House of Lies
+<div class="ending-title">Ending — House of Lies</div>
+
 Something in Mr. Vale's expression closes before the words have finished leaving your mouth.
 
-"If that is what you need this to be," he says, and opens the gate without meeting your eyes.
+"If that is what you need this to be," he says quietly, and opens the gate without meeting your eyes.
 
-You go out into the paling dark with a story sharp enough to hold. It may even be the one you tell. But the house behind you remains burdened with details you refused to carry, and the difference will follow longer than the smoke on your clothes.
+You go out into the paling dark carrying a story sharp enough to hold — sharp enough, perhaps, to tell. It may even be the one that survives. But the house behind you remains burdened with details you refused to carry, and you will feel their absence longer than you feel the smoke on your clothes.
 
-- [[Play again->Title]]
+<hr class="scene-break">
+
+[[Play again→Title]]
