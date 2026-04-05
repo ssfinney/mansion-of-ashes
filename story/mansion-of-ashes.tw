@@ -140,6 +140,7 @@ a.link-internal:hover {
 <<set $readLedger         = false>>
 <<set $sawConservatoryReveal = false>>
 <<set $heardLockedDoor    = false>>
+<<set $sawBirdcage        = false>>
 <<set $endingScore        = 0>>
 
 :: Title
@@ -162,13 +163,22 @@ You do not remember how you came here. You remember smoke. You remember a locked
 :: Bedroom
 You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
 
-The washstand holds a porcelain basin filmed with ash. The window has been nailed shut from the outside — not recently, but not by time alone. Something deliberate.
+The washstand holds a porcelain basin filmed with ash and one pillar candle burned recently enough that the wax is still soft near the wick. Someone visits this room.
+
+The window has been nailed shut from the outside — not recently, but not by time alone. Something deliberate.
 
 The only clear way out is the door.
 
 [[Step into the hallway->Hallway]]
 
 :: Hallway
+<<if $endingScore >= 4>>
+Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
+<<elseif $endingScore >= 2>>
+Beyond the upper windows, the darkness has thinned to a deep, draining blue. The night is running out.
+<<elseif $endingScore >= 1>>
+The upper windows show nothing yet — the sky is still a solid black.
+<</if>>
 <<if $powerOn>>
 Weak electric light hums through the surviving fixtures. The hall looks older with the dark driven back, not kinder.
 <<else>>
@@ -189,6 +199,9 @@ The portrait shows a woman seated beside a child in a winter garden. The heat da
 
 <hr class="scene-break">
 
+<<if !$hasMatches>>
+Something cold drifts from the back of the house — iron and stone. The kitchen.
+<</if>>
 - [[Go to the kitchen->Kitchen]]
 - [[Try the study door->Study Door]]
 - [[Go down to the basement->Basement Stairs]]
@@ -213,7 +226,7 @@ You know exactly what it is.
 [[Return to the hallway->Hallway]]
 
 :: Kitchen
-The kitchen is iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom.
+The kitchen is iron, stone, and old order. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom. On the draining board, a mug carries a ring of recently-dried tea at its lip.
 
 A drawer near the stove hangs half-open.
 
@@ -238,7 +251,7 @@ The back door is bolted and swollen in its frame. Beside it, a narrow service pa
 [[Return to the hallway->Hallway]]
 
 :: Study Door
-The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. At first you assume it is locked. Then you notice the latch has simply warped in the frame.
+The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. The door looks locked; the latch has only warped.
 
 Beyond it waits a room the house has tried and failed to keep sealed.
 
@@ -287,7 +300,7 @@ You have matches. The descent looks precarious but manageable.
 :: Fuse Box
 You strike a match. Sulfur flares bright enough to make you blink.
 
-The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown — the socket beside it is simply empty, its label reading //Glass Room// in faded ink.
+The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown — the socket beside it is simply empty, its label reading //Glass Room// in faded ink. Beside the cabinet, a bootprint in the coal dust holds its edges too cleanly to be old.
 
 <span id="fuse-zone"><<if $hasSpareFuse and !$powerOn>>\
 <<link "Fit the spare fuse and throw the main switch.">><<set $powerOn = true>><<replace "#fuse-zone">><span class="reveal-text">The house answers in stages: a shudder through the walls, a distant relay click, then a weak bloom of electric light above the stair. Somewhere in the entrance hall, a lock releases.</span><</replace>><</link>>\
@@ -309,7 +322,13 @@ The silver key turns with a dry, reluctant scrape.
 <<set $endingScore += 1>>
 <</if>>
 
-The conservatory opens beneath a long cracked ceiling of glass. Moonlight and the first dilute suggestion of dawn collect in the broken panes. At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery. A rusted birdcage hangs there, untouched by everything except time.
+The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 4>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 2>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery.
+
+<span id="birdcage-zone"><<if !$sawBirdcage>>\
+A rusted birdcage hangs there, untouched by everything except time. <<link "Examine the birdcage.">><<set $sawBirdcage = true>><<replace "#birdcage-zone">><<if $hasDiaryPage>>The cage hangs empty of its cloth cover. The child took it — the diary said the glass room was cold at night. Here is the place she came to keep warm, and here is all that remains of her being here: rust and wire and an empty hook where the cloth once hung.<</if>><<if !$hasDiaryPage>>The cage hangs empty. The wire latch is bent back as if something was removed by small hands unfamiliar with the mechanism.<</if>><</replace>><</link>>\
+<<else>>\
+<<if $hasDiaryPage>>The empty cage hangs in the nursery window — the place the child came for warmth the night the fire started.<</if>><<if !$hasDiaryPage>>The rusted birdcage hangs where it always has, empty and bent open.<</if>>\
+<</if>></span>
 
 The fire is no longer an event in a ledger. It is a room left open inside the house.
 
@@ -333,7 +352,7 @@ The entrance hall is wide and stripped nearly bare — only the runner on the st
 <<if !$powerOn>>
 The front lock is tied into the old electrical release. The handle turns half an inch and stops.
 
-Without power, the house will not let you out.
+Without power, the house will not let you out. Outside, at the edge of hearing, gravel shifts once and goes quiet.
 
 [[Return to the hallway->Hallway]]
 <<else>>
@@ -377,7 +396,7 @@ Mr. Vale steps aside without argument.
 
 You leave the house as dawn thins the dark above the grounds. Behind you, the mansion holds its lit windows like a man holding his breath — not revived so much as briefly permitted back into the world.
 
-You carry out a set of facts, a larger set of suspicions, and the clear sense that survival has outrun explanation. There will be time later to decide whether that is mercy or failure. For now the wet grass is cold under your feet, and the gate stands open, and the road does not ask what you understood.
+You carry out a set of facts, a larger set of suspicions, and the clear sense that survival has outrun explanation. There will be time later to decide whether that is mercy or failure. The wet grass is cold under your feet. The gate stands open. You go out before the dawn does.
 
 <hr class="scene-break">
 
