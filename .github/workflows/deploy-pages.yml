@@ -1,0 +1,101 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          fi
+          pip install pytest
+
+      - name: Bootstrap Tweego 2.1.1
+        run: |
+          mkdir -p .tools/tweego
+          curl -fsSL -o /tmp/tweego.zip \
+            https://github.com/tmedwards/tweego/releases/download/v2.1.1/tweego-2.1.1-linux-x64.zip
+          python - <<'PY'
+          import stat
+          import zipfile
+
+          with zipfile.ZipFile('/tmp/tweego.zip') as zf:
+              with zf.open('tweego') as src, open('.tools/tweego/tweego', 'wb') as dst:
+                  dst.write(src.read())
+          path = '.tools/tweego/tweego'
+          mode = stat.S_IMODE(__import__('os').stat(path).st_mode)
+          __import__('os').chmod(path, mode | 0o111)
+          PY
+
+      - name: Bootstrap SugarCube 2.37.3
+        run: |
+          rm -rf .storyformats/sugarcube-2
+          mkdir -p .storyformats
+          curl -fsSL -o /tmp/sugarcube.zip \
+            https://github.com/tmedwards/sugarcube-2/releases/download/v2.37.3/sugarcube-2.37.3-for-twine-2.1-local.zip
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+
+          target = Path('.storyformats')
+          with zipfile.ZipFile('/tmp/sugarcube.zip') as zf:
+              zf.extractall(target)
+          PY
+
+      - name: Verify local toolchain contract
+        run: |
+          test -x .tools/tweego/tweego
+          test -f .storyformats/sugarcube-2/format.js
+
+      - name: Build story
+        run: bash scripts/build-story.sh
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
