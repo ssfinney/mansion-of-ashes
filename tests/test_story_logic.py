@@ -56,7 +56,7 @@ class TestStoryStructure(unittest.TestCase):
 
     def test_narrative_map_passages_exist(self):
         match = re.search(
-            r"## Passage List\n\n(?P<section>(?:- .+\n)+)",
+            r"## Passage List\s*\n+(?P<section>(?:- .+\n)+)",
             self.narrative_map_doc,
             flags=re.MULTILINE,
         )
