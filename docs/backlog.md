@@ -35,7 +35,7 @@
 **Recommendation:** do next, but keep the hint subtle and optional.
 
 - **Why:** returning players currently restart with no acknowledgement of prior completion. A lightweight hint can improve replay discovery without flattening mystery tone.
-- **Implementation note:** this needs cross-run persistence. Story variables reset in `StoryInit`, so use SugarCube persistent storage (for example, metadata or `State.variables` + save system) to track at least one completed ending.
+- **Implementation note:** this needs cross-run persistence. `[[Play again->Title]]` does not reset story state or re-run `StoryInit`; use `Engine.restart()` for an in-session hard reset, and use SugarCube metadata (`memorize()`/`recall()`) to persist a completion flag across full restarts or refreshes.
 - **Scope guard:** one short line and one optional link in `Title`; avoid explicit solution text.
 - **Risk:** over-directive copy could reduce pacing and undermine discovery.
 
@@ -67,9 +67,8 @@
 
 ## Bugs And Technical Debt To Address During Next Steps
 
-- `README.md` says the prototype has 15 authored passages, but the current story includes 16 story passages plus `StoryInit`; update docs to avoid drift during planning and handoff.
 - `$endingScore` is incremented across multiple passages but currently does not gate ending selection; either wire it into end-state logic or document it as reserved for future scoring UI so contributors do not assume it is live.
-- Any second-playthrough hint feature must not rely on `StoryInit` state alone because `[[Play again->Title]]` starts a fresh run and clears story variables.
+- Any second-playthrough hint feature should treat two concerns separately: (1) in-session restart behavior (`Engine.restart()`), and (2) cross-session persistence via metadata (`memorize()`/`recall()`).
 
 ## Suggested Implementation Order
 
