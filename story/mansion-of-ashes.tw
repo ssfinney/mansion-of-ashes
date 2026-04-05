@@ -141,6 +141,9 @@ a.link-internal:hover {
 <<set $sawConservatoryReveal = false>>
 <<set $heardLockedDoor    = false>>
 <<set $sawBirdcage        = false>>
+<<set $readServantLog    = false>>
+<<set $descendedDark     = false>>
+<<set $unlockedEpilogue  = false>>
 <<set $endingScore        = 0>>
 
 :: Title
@@ -208,6 +211,7 @@ Something cold drifts from the back of the house — iron and stone. The kitchen
 <<if $hasSilverKey>>- [[Unlock the conservatory->Conservatory]]
 <<else>>- //The conservatory door carries a silver lockplate you cannot open.//
 <</if>>
+<<if $powerOn>>- [[Go to the servant's quarters->Servant's Quarters]]<</if>>
 - [[Go to the main exit->Main Exit]]
 
 :: Hallway-Portrait
@@ -259,7 +263,7 @@ Beyond it waits a room the house has tried and failed to keep sealed.
 - [[Return to the hallway->Hallway]]
 
 :: Study
-Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
+Books line the walls behind wire mesh. The desk is ordered the way a person orders things when they have spent years trying not to forget.
 
 On the blotter rests a caretaker's ledger. Beneath it, a folded page.
 
@@ -286,10 +290,15 @@ The desk drawer hangs open — empty except for ash and a bent fountain pen.
 :: Basement Stairs
 Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
 
-<<if !$hasMatches>>
-Without a light source, the lower landing is only a deeper absence. You would not find the fuse cabinet blind.
+<<if !$hasMatches and !($hasSpareFuse and $readLedger)>>
+The kind of dark that is not merely dim but actively present — a wall of nothing your eyes find no purchase on. Without a light source and some idea of what you are looking for, you would only fall.
 
-[[Return to the hallway->Hallway]]
+- [[Return to the hallway->Hallway]]
+<<elseif !$hasMatches and $hasSpareFuse and $readLedger>>
+You have no light. But the ledger described the layout precisely, and the fuse is already in your pocket. You know what you are looking for and roughly where to find it. The descent would be blind but not uninformed.
+
+- <<link "Descend carefully in the dark.">><<set $descendedDark = true>><<goto "Fuse Box">><</link>>
+- [[Return to the hallway->Hallway]]
 <<else>>
 You have matches. The descent looks precarious but manageable.
 
@@ -298,7 +307,11 @@ You have matches. The descent looks precarious but manageable.
 <</if>>
 
 :: Fuse Box
+<<if $descendedDark>>
+You find the cabinet by feel — cold wall, cold pipe, cold metal door. Your fingers trace the ceramic sockets by touch. The label reading //Glass Room// is only legible when you hold it an inch from your face.
+<<else>>
 You strike a match. Sulfur flares bright enough to make you blink.
+<</if>>
 
 The fuse cabinet is mounted beside a coal chute. One ceramic fuse has blown — the socket beside it is simply empty, its label reading //Glass Room// in faded ink. Beside the cabinet, a bootprint in the coal dust holds its edges too cleanly to be old.
 
@@ -314,6 +327,21 @@ Without a replacement fuse, the circuit stays broken. The ledger mentioned where
 
 [[Climb back to the hallway->Hallway]]
 
+:: Servant's Quarters
+Power has released a latch you overlooked before — a narrow door beside the kitchen passage, its frame painted shut at some point and now freed by the electrical release.
+
+The room beyond is small: a canvas cot, a shelf of almanacs and route maps, a pair of boots left heels-together beside the door. On the windowsill, folded between two almanac covers, a letter in a hand other than Vale's.
+
+<span id="servant-letter-zone"><<if !$readServantLog>>\
+<<link "Read the letter.">><<set $readServantLog = true>><<replace "#servant-letter-zone">><span class="reveal-text">The handwriting is cramped and careful. <em>"Vale carries the whole house now. The family barely speaks — the mistress gone two years, the father away more than he is here. The girl has latched on to him like he is her own. I tell him he ought to set limits but he hasn't the heart. He is run down to the bone and still he doesn't refuse her anything. It will end badly. These situations always do."</em> No date. The writer left before the fire.</span><</replace>><</link>>\
+<<else>>\
+<span class="hud-dim">The letter lies where you left it. The warning carries more weight now than when it was written.</span>\
+<</if>></span>
+
+<hr class="scene-break">
+
+[[Return to the hallway->Hallway]]
+
 :: Conservatory
 The silver key turns with a dry, reluctant scrape.
 
@@ -322,7 +350,7 @@ The silver key turns with a dry, reluctant scrape.
 <<set $endingScore += 1>>
 <</if>>
 
-The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 5>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 4>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery.
+The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 5>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 4>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery. Below the collapsed window, at the edge of the grounds, a figure moves slowly through the wet grass — unhurried, as though the house were still his to tend.
 
 <span id="birdcage-zone"><<if !$sawBirdcage>>\
 A rusted birdcage hangs there, untouched by everything except time. <<link "Examine the birdcage.">><<set $sawBirdcage = true>><<replace "#birdcage-zone">><<if $hasDiaryPage>>The cage hangs empty of its cloth cover. The child took it — the diary said the glass room was cold at night. Here is the place she came to keep warm, and here is all that remains of her being here: rust and wire and an empty hook where the cloth once hung.<</if>><<if !$hasDiaryPage>>The cage hangs empty. The wire latch is bent back as if something was removed by small hands unfamiliar with the mechanism.<</if>><</replace>><</link>>\
@@ -365,7 +393,8 @@ When you draw the door inward, cold predawn air enters first. Then you see the m
 
 :: Caretaker Encounter
 <<set $metCaretaker = true>>
-<<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>
+<<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and ($heardLockedDoor or $readServantLog)>>
+<<if _fullTruth>><<set $unlockedEpilogue = true>><</if>>
 
 Mr. Vale lowers his hand slowly. He does not ask how you found your way inside. His eyes move once past you toward the lit hall, then toward the upper floor. Not fear — something that has had twelve years to settle into calculation.
 
@@ -400,6 +429,7 @@ You carry out a set of facts, a larger set of suspicions, and the clear sense th
 
 <hr class="scene-break">
 
+<<if $unlockedEpilogue>>[[Read the assembled account->Epilogue]]<br><</if>>
 [[Play again->Title]]
 
 :: Ending: Bitter Truth
@@ -415,6 +445,7 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 
 <hr class="scene-break">
 
+<<if $unlockedEpilogue>>[[Read the assembled account->Epilogue]]<br><</if>>
 [[Play again->Title]]
 
 :: Ending: House of Lies
@@ -425,6 +456,24 @@ Something in Mr. Vale's expression closes before the words have finished leaving
 "If that is what you need this to be," he says quietly, and opens the gate without meeting your eyes.
 
 You go out into the paling dark carrying a story sharp enough to hold — sharp enough, perhaps, to tell. It may even be the one that survives. But the house behind you remains burdened with details you refused to carry, and you will feel their absence longer than you feel the smoke on your clothes.
+
+<hr class="scene-break">
+
+<<if $unlockedEpilogue>>[[Read the assembled account->Epilogue]]<br><</if>>
+[[Play again->Title]]
+
+:: Epilogue
+<div class="ending-title">The Night of the Fire — Assembled</div>
+
+From everything you found, this is what the house has given you:
+
+The child's mother had been gone for two years. Her father maintained the estate by correspondence. The girl — Elise — spent her evenings with the caretaker, Mr. Vale, because there was no one else. He was tired. He told her to be quiet about the lamp she had found — a small thing, a stray kindness — and she obeyed him. Later that night, cold in the room her father had assigned her, she went to the conservatory for warmth and took the birdcage cloth on her way. She was not frightened. She was resourceful. She did not come back.
+
+The fire started in the east wing before dawn. The cause was never established to anyone's satisfaction, which is the kind of fact that takes up permanent residence in a person.
+
+Vale sealed the conservatory, hid the key, and stayed. The lie he maintained was not that the fire happened — only that its shape was simpler than it was. A tired man, a careless lamp, a tragedy without a child's agency in it. He could not bring himself to give her back the credit for her own death.
+
+You leave knowing this. Whether it changes anything is a question the house cannot answer for you.
 
 <hr class="scene-break">
 

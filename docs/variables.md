@@ -84,6 +84,27 @@
 - Changes: set in `Conservatory` on first birdcage examine
 - Used by: `Conservatory` (birdcage-zone span)
 
+## `$readServantLog`
+
+- Type: boolean
+- Purpose: tracks whether the player read the third-party letter in the servant's quarters; serves as an alternative to `$heardLockedDoor` for the 4th clue required by Bitter Truth (`_fullTruth` condition)
+- Changes: set in `Servant's Quarters`
+- Used by: `Caretaker Encounter` (_fullTruth condition)
+
+## `$descendedDark`
+
+- Type: boolean
+- Purpose: tracks whether the player chose to descend the basement stairs without matches, using ledger knowledge and possession of the spare fuse; gates alternate opening text in Fuse Box
+- Changes: set in `Basement Stairs` (dark descent link)
+- Used by: `Fuse Box` (alternate opening paragraph)
+
+## `$unlockedEpilogue`
+
+- Type: boolean
+- Purpose: gates the post-ending Epilogue passage; set when the player reaches the caretaker with full contextual knowledge (_fullTruth) regardless of which ending choice they make
+- Changes: set in `Caretaker Encounter` when `_fullTruth` is true
+- Used by: `Ending: Escape`, `Ending: Bitter Truth`, `Ending: House of Lies` (conditional Epilogue link)
+
 ## `$endingScore`
 
 - Type: integer
