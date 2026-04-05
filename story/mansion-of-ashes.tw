@@ -206,6 +206,7 @@ a.link-internal:hover {
 <<set $heardLockedDoor    = false>>
 <<set $sawBirdcage        = false>>
 <<set $endingScore        = 0>>
+<<set $audioEnabled       = false>>
 
 <<cacheaudio "music-undertow" "assets/audio/music/undertow.mp3">>
 <<cacheaudio "music-hiraeth" "assets/audio/music/hiraeth.mp3">>
@@ -217,14 +218,45 @@ a.link-internal:hover {
 <<cacheaudio "sfx-floorboard-creak" "assets/audio/sfx/floorboard-creak.mp3">>
 <<cacheaudio "sfx-door-creak" "assets/audio/sfx/door-creak.mp3">>
 
-:: Title
+:: PassageHeader
+<<if !$audioEnabled>>
+<<audio ":all" stop>>
+<<else>>
+<<set _p = State.passage>>
+<<if _p is "Title" or _p is "Credits: Audio">>
 <<audio "music-undertow" loop volume 0.24 fadein play>>
 <<audio "music-hiraeth" stop>>
 <<audio "music-conservatory" stop>>
 <<audio "amb-house" stop>>
 <<audio "amb-windy-room" stop>>
 <<audio "amb-elec-hum" stop>>
+<<elseif _p is "Conservatory">>
+<<audio "music-undertow" stop>>
+<<audio "music-hiraeth" fadeout stop>>
+<<audio "music-conservatory" loop volume 0.26 fadein play>>
+<<audio "amb-house" stop>>
+<<audio "amb-windy-room" loop volume 0.22 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+<<elseif _p is "Caretaker Encounter">>
+<<audio "music-undertow" stop>>
+<<audio "music-hiraeth" stop>>
+<<audio "music-conservatory" stop>>
+<<audio "amb-house" loop volume 0.08 play>>
+<<audio "amb-windy-room" stop>>
+<<audio "amb-elec-hum" stop>>
+<<elseif _p.startsWith("Ending:")>>
+<<audio ":all" stop>>
+<<else>>
+<<audio "music-undertow" fadeout stop>>
+<<audio "music-conservatory" fadeout stop>>
+<<audio "music-hiraeth" loop volume 0.24 fadein play>>
+<<audio "amb-house" loop volume 0.18 play>>
+<<audio "amb-windy-room" stop>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+<</if>>
+<</if>>
 
+:: Title
 <div style="text-align:center; padding: 2rem 0 1rem;">
 <p style="font-size:0.85rem; letter-spacing:0.18em; color:#6b6058; text-transform:uppercase;">A short mystery</p>
 <h1 style="font-size:2rem; color:#d4c8b4; margin:0.4rem 0;">Mansion of Ashes</h1>
@@ -242,12 +274,14 @@ You do not remember how you came here. You remember smoke. You remember a locked
 [[Begin->Bedroom]]
 <br>
 [[Audio credits->Credits: Audio]]
+<br>
+<<if !$audioEnabled>>
+<<link "Enable audio">><<set $audioEnabled = true>><<goto "Title">><</link>>
+<<else>>
+<<link "Mute audio">><<set $audioEnabled = false>><<audio ":all" stop>><<goto "Title">><</link>>
+<</if>>
 
 :: Bedroom
-<<audio "music-undertow" loop volume 0.2 play>>
-<<audio "amb-house" loop volume 0.18 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
-
 You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
 
 The washstand holds a porcelain basin filmed with ash and one pillar candle burned recently enough that the wax is still soft near the wick. Someone visits this room.
@@ -261,11 +295,7 @@ The only clear way out is the door.
 [[Step into the hallway->Hallway]]
 
 :: Hallway
-<<audio "music-undertow" fadeout stop>>
-<<audio "music-hiraeth" loop volume 0.24 fadein play>>
-<<audio "amb-house" loop volume 0.2 play>>
 <<audio "sfx-floorboard-creak" volume 0.5 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
 
 <<if $endingScore >= 4>>
 Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
@@ -328,10 +358,6 @@ You know exactly what it is.
 [[Return to the hallway->Hallway]]
 
 :: Kitchen
-<<audio "music-hiraeth" loop volume 0.24 play>>
-<<audio "amb-house" loop volume 0.18 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><</if>>
-
 The kitchen is iron, stone, and old order. The colder air settles across your hands as soon as you cross the threshold. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom. On the draining board, a mug carries a ring of recently-dried tea at its lip.
 
 A drawer near the stove hangs half-open.
@@ -371,9 +397,6 @@ Beyond it waits a room the house has tried and failed to keep sealed.
 - [[Return to the hallway->Hallway]]
 
 :: Study
-<<audio "music-hiraeth" loop volume 0.24 play>>
-<<audio "amb-house" loop volume 0.18 play>>
-
 Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
 
 <<if $powerOn>>
@@ -403,10 +426,6 @@ The desk drawer hangs open — empty except for ash and a bent fountain pen.
 [[Return to the hallway->Hallway]]
 
 :: Basement Stairs
-<<audio "music-hiraeth" loop volume 0.2 play>>
-<<audio "amb-house" loop volume 0.16 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.15 play>><</if>>
-
 Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
 The air finds the skin at your throat and slides under your collar.
 
@@ -427,8 +446,6 @@ You have matches. The descent looks precarious but manageable.
 
 :: Fuse Box
 <<audio "sfx-match-strike" volume 0.75 play>>
-<<audio "amb-house" volume 0.12 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.18 play>><</if>>
 
 You strike a match. Sulfur flares bright enough to make you blink.
 Heat pricks your fingertips while the smell catches sharp at the back of your nose.
@@ -449,12 +466,6 @@ Without a replacement fuse, the circuit stays broken. The ledger mentioned where
 [[Climb back to the hallway->Hallway]]
 
 :: Conservatory
-<<audio "music-hiraeth" fadeout stop>>
-<<audio "music-conservatory" loop volume 0.26 fadein play>>
-<<audio "amb-house" stop>>
-<<audio "amb-windy-room" loop volume 0.22 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><</if>>
-
 The silver key turns with a dry, reluctant scrape.
 
 <<if !$sawConservatoryReveal>>
@@ -491,10 +502,6 @@ Dead vines are trained over iron ribs. The air is colder here than anywhere else
 [[Return to the hallway->Hallway]]
 
 :: Main Exit
-<<audio "music-hiraeth" loop volume 0.2 play>>
-<<audio "amb-house" loop volume 0.16 play>>
-<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><</if>>
-
 The entrance hall is wide and stripped nearly bare — only the runner on the stair, and a smell of extinguished smoke that no season has quite removed.
 
 <<if !$powerOn>>
@@ -512,13 +519,6 @@ When you draw the door inward, cold predawn air enters first. Then you see the m
 <</if>>
 
 :: Caretaker Encounter
-<<audio "music-hiraeth" stop>>
-<<audio "music-conservatory" stop>>
-<<audio "music-undertow" stop>>
-<<audio "amb-house" volume 0.08 play>>
-<<audio "amb-windy-room" stop>>
-<<audio "amb-elec-hum" stop>>
-
 <<set $metCaretaker = true>>
 <<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>
 
@@ -549,8 +549,6 @@ You think of the chalk star on the chained service door — placed at a child's 
 - <<link "Tell him to open the gate and keep his reasons.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
 
 :: Ending: Escape
-<<audio "amb-house" stop>>
-
 <div class="ending-title">Ending — Escape</div>
 
 Mr. Vale steps aside without argument.
@@ -564,8 +562,6 @@ You carry out a set of facts, a larger set of suspicions, and the knowledge that
 <<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: Bitter Truth
-<<audio "amb-house" stop>>
-
 <div class="ending-title">Ending — The Bitter Truth</div>
 
 Mr. Vale reads the diary page once. He reads it again. Then he closes his eyes.
@@ -581,8 +577,6 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 <<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: House of Lies
-<<audio "amb-house" stop>>
-
 <div class="ending-title">Ending — House of Lies</div>
 
 Something in Mr. Vale's expression closes before the words have finished leaving your mouth.

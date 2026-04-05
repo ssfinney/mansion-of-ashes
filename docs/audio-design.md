@@ -11,6 +11,8 @@ The story is grief-forward, not horror-forward. Audio should suggest the house e
 - Spot SFX: `0.60–0.80`
 - Caretaker confrontation: `0.00–0.10` (prefer silence)
 
+Default behavior should be **muted until the player opts in** (explicit interaction), both for accessibility and browser autoplay reliability.
+
 ## Recommended licensed sources
 
 ### Music (Scott Buckley, CC BY 4.0)
@@ -62,6 +64,16 @@ Use StoryInit for audio registration:
 <<cacheaudio "music-hiraeth" "assets/audio/music/hiraeth.mp3">>
 <<cacheaudio "amb-house" "assets/audio/ambience/house-interior.mp3">>
 <<cacheaudio "sfx-match-strike" "assets/audio/sfx/match-strike.mp3">>
+```
+
+Use a centralized `PassageHeader` router to avoid duplicating full music/ambience logic across location passages:
+
+```twine
+<<if !$audioEnabled>>
+  <<audio ":all" stop>>
+<<else>>
+  /* route current passage to the right music/ambience bed */
+<</if>>
 ```
 
 Passage-level playback:

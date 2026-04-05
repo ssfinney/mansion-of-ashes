@@ -90,3 +90,10 @@
 - Purpose: summarizes clue completeness for atmosphere pacing and potential future scoring; currently drives dawn-progression text in `Hallway` and `Conservatory`
 - Changes: incremented in `Kitchen` (+1 pantry), `Study` (+1 ledger, +1 diary), `Hallway` (+1 silver key), `Conservatory` (+1 reveal)
 - Used by: sky-description conditionals in `Hallway` and `Conservatory` (not currently used to route endings)
+
+## `$audioEnabled`
+
+- Type: boolean
+- Purpose: stores player audio consent/preference so sound remains opt-in and silence stays the default texture
+- Changes: toggled in `Title` via explicit enable/mute links
+- Used by: `PassageHeader` to route all music/ambience playback and stop all tracks when muted
