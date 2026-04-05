@@ -146,7 +146,13 @@ body.power-off hr.scene-break {
   #ui-bar {
     width: 100% !important;
     max-width: 100% !important;
+    left: 0 !important;
     box-shadow: none !important;
+  }
+
+  /* Keep only the toggle visible when SugarCube marks the bar as stowed. */
+  #ui-bar.stowed {
+    left: calc(-100% + 2.75rem) !important;
   }
 
   /* ── Sidebar toggle: larger tap target ── */
