@@ -176,7 +176,7 @@ The only clear way out is the door.
 Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
 <<elseif $endingScore >= 2>>
 Beyond the upper windows, the darkness has thinned to a deep, draining blue. The night is running out.
-<<elseif $endingScore >= 1>>
+<<else>>
 The upper windows show nothing yet — the sky is still a solid black.
 <</if>>
 <<if $powerOn>>
@@ -322,7 +322,7 @@ The silver key turns with a dry, reluctant scrape.
 <<set $endingScore += 1>>
 <</if>>
 
-The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 4>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 2>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery.
+The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 5>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 4>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery.
 
 <span id="birdcage-zone"><<if !$sawBirdcage>>\
 A rusted birdcage hangs there, untouched by everything except time. <<link "Examine the birdcage.">><<set $sawBirdcage = true>><<replace "#birdcage-zone">><<if $hasDiaryPage>>The cage hangs empty of its cloth cover. The child took it — the diary said the glass room was cold at night. Here is the place she came to keep warm, and here is all that remains of her being here: rust and wire and an empty hook where the cloth once hung.<</if>><<if !$hasDiaryPage>>The cage hangs empty. The wire latch is bent back as if something was removed by small hands unfamiliar with the mechanism.<</if>><</replace>><</link>>\
