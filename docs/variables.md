@@ -87,6 +87,6 @@
 ## `$endingScore`
 
 - Type: integer
-- Purpose: summarizes clue completeness for ending resolution and drives dawn-progression text in `Hallway` and `Conservatory`
+- Purpose: summarizes clue completeness for atmosphere pacing and potential future scoring; currently drives dawn-progression text in `Hallway` and `Conservatory`
 - Changes: incremented in `Kitchen` (+1 pantry), `Study` (+1 ledger, +1 diary), `Hallway` (+1 silver key), `Conservatory` (+1 reveal)
-- Used by: ending routing in `Caretaker Encounter`; sky-description conditionals in `Hallway` and `Conservatory`
+- Used by: sky-description conditionals in `Hallway` and `Conservatory` (not currently used to route endings)
