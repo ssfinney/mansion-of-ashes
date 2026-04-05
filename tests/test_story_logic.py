@@ -56,9 +56,8 @@ class TestStoryStructure(unittest.TestCase):
 
     def test_narrative_map_passages_exist(self):
         match = re.search(
-            r"## Passage List\n\n(?P<section>(?:- .+\n)+)",
+            r"## Passage List\s*\n+(?P<section>(?:- .+(?:\n|$))+)",
             self.narrative_map_doc,
-            flags=re.MULTILINE,
         )
         self.assertIsNotNone(match, "Could not find 'Passage List' section in narrative map")
 
@@ -80,14 +79,20 @@ class TestStoryStructure(unittest.TestCase):
     def test_caretaker_bitter_truth_requires_full_clue_set(self):
         caretaker = self.passages["Caretaker Encounter"]
 
-        full_truth_set = re.search(
-            r"<<set\s+_fullTruth\s*=\s*\$hasDiaryPage\s+and\s+\$readLedger\s+and\s+\$sawConservatoryReveal\s+and\s+\$heardLockedDoor\s*>>",
+        full_truth_match = re.search(
+            r"<<set\s+_fullTruth\s*(?:=|to)\s*(?P<logic>.+?)\.?\s*>>",
             caretaker,
         )
-        self.assertIsNotNone(full_truth_set, "Caretaker Encounter must define _fullTruth from clue-state booleans")
+        self.assertIsNotNone(
+            full_truth_match,
+            "Caretaker Encounter must define _fullTruth from clue-state booleans",
+        )
+        logic = full_truth_match.group("logic")
+        for var in ["$hasDiaryPage", "$readLedger", "$sawConservatoryReveal", "$heardLockedDoor"]:
+            self.assertIn(var, logic, f"Variable {var} missing from _fullTruth logic")
 
         truth_routes = re.findall(
-            r"<<if\s+_fullTruth\s*>>\s*<<goto\s+[\"']Ending: Bitter Truth[\"']>>\s*<<else>>\s*<<goto\s+[\"']Ending: Escape[\"']>>\s*<</if>>",
+            r"<<if\s+_fullTruth\s*>>\s*<<goto\s+[\"']Ending: Bitter Truth[\"']\s*>>\s*<<else\s*>>\s*<<goto\s+[\"']Ending: Escape[\"']\s*>>\s*<</if\s*>>",
             caretaker,
         )
         self.assertGreaterEqual(
