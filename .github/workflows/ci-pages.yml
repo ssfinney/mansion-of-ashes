@@ -142,7 +142,7 @@ jobs:
           if-no-files-found: warn
 
   deploy:
-    needs: build-test
+    needs: [build-test, screenshot-tests]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
