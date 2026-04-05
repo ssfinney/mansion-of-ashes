@@ -83,8 +83,6 @@ class TestStoryStructure(unittest.TestCase):
         for var in ["$hasDiaryPage", "$readLedger", "$sawConservatoryReveal", "$heardLockedDoor"]:
             self.assertIn(var, full_truth_line[0])
 
-        truth_routes = re.findall(
-            r"<<if\s+_fullTruth\s*>>\s*<<goto\s+[\"']Ending: Bitter Truth[\"']>>\s*<<else>>\s*<<goto\s+[\"']Ending: Escape[\"']>>\s*<</if>>",
         full_truth_match = re.search(
             r"<<set\s+_fullTruth\s*(?:=|to)\s*(?P<logic>.+?)\.?\s*>>",
             caretaker,

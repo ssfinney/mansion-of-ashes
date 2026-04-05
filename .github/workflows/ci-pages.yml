@@ -1,0 +1,107 @@
+name: CI and Pages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pytest
+        run: |
+          set -euo pipefail
+          pip install pytest
+
+      - name: Cache Tweego and SugarCube
+        id: twine-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .tools/tweego
+            .storyformats/sugarcube-2
+          key: ${{ runner.os }}-twine-tweego-2.1.1-sugarcube-2.37.3
+
+      - name: Bootstrap toolchain on cache miss
+        if: steps.twine-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          ROOT="$GITHUB_WORKSPACE"
+          TMP="/tmp/twine"
+          TOOLS="$ROOT/.tools/tweego"
+          FMT="$ROOT/.storyformats/sugarcube-2"
+
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$TOOLS" "$FMT"
+
+          wget -O "$TMP/tweego.zip" https://github.com/tmedwards/tweego/releases/download/v2.1.1/tweego-2.1.1-linux-x64.zip
+          python3 -m zipfile -e "$TMP/tweego.zip" "$TMP/tweego"
+          install -m 0755 "$TMP/tweego/tweego" "$TOOLS/tweego"
+
+          wget -O "$TMP/sugarcube.zip" https://github.com/tmedwards/sugarcube-2/releases/download/v2.37.3/sugarcube-2.37.3-for-twine-2.1-local.zip
+          python3 -m zipfile -e "$TMP/sugarcube.zip" "$TMP/sugarcube"
+          cp -R "$TMP/sugarcube/sugarcube-2"/. "$FMT"/
+
+      - name: Verify toolchain
+        run: |
+          set -euo pipefail
+          test -x .tools/tweego/tweego
+          test -f .storyformats/sugarcube-2/format.js
+
+      - name: Build story
+        run: |
+          set -euo pipefail
+          bash scripts/build-story.sh
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          pytest -q
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mansion-of-ashes-build
+          path: build/
+          if-no-files-found: error
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/
+
+  deploy:
+    needs: build-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
