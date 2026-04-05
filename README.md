@@ -47,7 +47,7 @@ This repository does not depend on runtime AI generation. All state and outcomes
 
 ## Current Prototype Scope
 
-- 15 authored passages plus `StoryInit`
+- 16 authored passages plus `StoryInit`
 - 3 endings
 - 3 inventory items
 - 1 central puzzle chain: matches -> clues -> silver key -> spare fuse -> restored power -> final confrontation
