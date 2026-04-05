@@ -207,7 +207,24 @@ a.link-internal:hover {
 <<set $sawBirdcage        = false>>
 <<set $endingScore        = 0>>
 
+<<cacheaudio "music-undertow" "assets/audio/music/undertow.mp3">>
+<<cacheaudio "music-hiraeth" "assets/audio/music/hiraeth.mp3">>
+<<cacheaudio "music-conservatory" "assets/audio/music/conservatory-theme.mp3">>
+<<cacheaudio "amb-house" "assets/audio/ambience/house-interior.mp3">>
+<<cacheaudio "amb-windy-room" "assets/audio/ambience/windy-room.mp3">>
+<<cacheaudio "amb-elec-hum" "assets/audio/ambience/electrical-hum.mp3">>
+<<cacheaudio "sfx-match-strike" "assets/audio/sfx/match-strike.mp3">>
+<<cacheaudio "sfx-floorboard-creak" "assets/audio/sfx/floorboard-creak.mp3">>
+<<cacheaudio "sfx-door-creak" "assets/audio/sfx/door-creak.mp3">>
+
 :: Title
+<<audio "music-undertow" loop volume 0.24 fadein play>>
+<<audio "music-hiraeth" stop>>
+<<audio "music-conservatory" stop>>
+<<audio "amb-house" stop>>
+<<audio "amb-windy-room" stop>>
+<<audio "amb-elec-hum" stop>>
+
 <div style="text-align:center; padding: 2rem 0 1rem;">
 <p style="font-size:0.85rem; letter-spacing:0.18em; color:#6b6058; text-transform:uppercase;">A short mystery</p>
 <h1 style="font-size:2rem; color:#d4c8b4; margin:0.4rem 0;">Mansion of Ashes</h1>
@@ -223,8 +240,14 @@ You do not remember how you came here. You remember smoke. You remember a locked
 <hr class="scene-break">
 
 [[Begin->Bedroom]]
+<br>
+[[Audio credits->Credits: Audio]]
 
 :: Bedroom
+<<audio "music-undertow" loop volume 0.2 play>>
+<<audio "amb-house" loop volume 0.18 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+
 You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
 
 The washstand holds a porcelain basin filmed with ash and one pillar candle burned recently enough that the wax is still soft near the wick. Someone visits this room.
@@ -238,6 +261,12 @@ The only clear way out is the door.
 [[Step into the hallway->Hallway]]
 
 :: Hallway
+<<audio "music-undertow" fadeout stop>>
+<<audio "music-hiraeth" loop volume 0.24 fadein play>>
+<<audio "amb-house" loop volume 0.2 play>>
+<<audio "sfx-floorboard-creak" volume 0.5 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+
 <<if $endingScore >= 4>>
 Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
 <<elseif $endingScore >= 2>>
@@ -299,6 +328,10 @@ You know exactly what it is.
 [[Return to the hallway->Hallway]]
 
 :: Kitchen
+<<audio "music-hiraeth" loop volume 0.24 play>>
+<<audio "amb-house" loop volume 0.18 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><</if>>
+
 The kitchen is iron, stone, and old order. The colder air settles across your hands as soon as you cross the threshold. Copper pans hang above a cold range. Someone has cleaned here recently — the sink, the table, the knife block — while leaving everything else to a fine gray bloom. On the draining board, a mug carries a ring of recently-dried tea at its lip.
 
 A drawer near the stove hangs half-open.
@@ -328,6 +361,8 @@ The back door is bolted and swollen in its frame. Beside it, a narrow service pa
 [[Return to the hallway->Hallway]]
 
 :: Study Door
+<<audio "sfx-door-creak" volume 0.5 play>>
+
 The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. The door looks locked; the latch has only warped.
 
 Beyond it waits a room the house has tried and failed to keep sealed.
@@ -336,6 +371,9 @@ Beyond it waits a room the house has tried and failed to keep sealed.
 - [[Return to the hallway->Hallway]]
 
 :: Study
+<<audio "music-hiraeth" loop volume 0.24 play>>
+<<audio "amb-house" loop volume 0.18 play>>
+
 Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
 
 <<if $powerOn>>
@@ -365,6 +403,10 @@ The desk drawer hangs open — empty except for ash and a bent fountain pen.
 [[Return to the hallway->Hallway]]
 
 :: Basement Stairs
+<<audio "music-hiraeth" loop volume 0.2 play>>
+<<audio "amb-house" loop volume 0.16 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.15 play>><</if>>
+
 Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
 The air finds the skin at your throat and slides under your collar.
 
@@ -384,6 +426,10 @@ You have matches. The descent looks precarious but manageable.
 <</if>>
 
 :: Fuse Box
+<<audio "sfx-match-strike" volume 0.75 play>>
+<<audio "amb-house" volume 0.12 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.18 play>><</if>>
+
 You strike a match. Sulfur flares bright enough to make you blink.
 Heat pricks your fingertips while the smell catches sharp at the back of your nose.
 
@@ -403,6 +449,12 @@ Without a replacement fuse, the circuit stays broken. The ledger mentioned where
 [[Climb back to the hallway->Hallway]]
 
 :: Conservatory
+<<audio "music-hiraeth" fadeout stop>>
+<<audio "music-conservatory" loop volume 0.26 fadein play>>
+<<audio "amb-house" stop>>
+<<audio "amb-windy-room" loop volume 0.22 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><</if>>
+
 The silver key turns with a dry, reluctant scrape.
 
 <<if !$sawConservatoryReveal>>
@@ -439,6 +491,10 @@ Dead vines are trained over iron ribs. The air is colder here than anywhere else
 [[Return to the hallway->Hallway]]
 
 :: Main Exit
+<<audio "music-hiraeth" loop volume 0.2 play>>
+<<audio "amb-house" loop volume 0.16 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><</if>>
+
 The entrance hall is wide and stripped nearly bare — only the runner on the stair, and a smell of extinguished smoke that no season has quite removed.
 
 <<if !$powerOn>>
@@ -456,6 +512,13 @@ When you draw the door inward, cold predawn air enters first. Then you see the m
 <</if>>
 
 :: Caretaker Encounter
+<<audio "music-hiraeth" stop>>
+<<audio "music-conservatory" stop>>
+<<audio "music-undertow" stop>>
+<<audio "amb-house" volume 0.08 play>>
+<<audio "amb-windy-room" stop>>
+<<audio "amb-elec-hum" stop>>
+
 <<set $metCaretaker = true>>
 <<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>
 
@@ -486,6 +549,8 @@ You think of the chalk star on the chained service door — placed at a child's 
 - <<link "Tell him to open the gate and keep his reasons.">><<set $trustCaretaker -= 1>><<goto "Ending: House of Lies">><</link>>
 
 :: Ending: Escape
+<<audio "amb-house" stop>>
+
 <div class="ending-title">Ending — Escape</div>
 
 Mr. Vale steps aside without argument.
@@ -499,6 +564,8 @@ You carry out a set of facts, a larger set of suspicions, and the knowledge that
 <<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: Bitter Truth
+<<audio "amb-house" stop>>
+
 <div class="ending-title">Ending — The Bitter Truth</div>
 
 Mr. Vale reads the diary page once. He reads it again. Then he closes his eyes.
@@ -514,6 +581,8 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 <<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: House of Lies
+<<audio "amb-house" stop>>
+
 <div class="ending-title">Ending — House of Lies</div>
 
 Something in Mr. Vale's expression closes before the words have finished leaving your mouth.
@@ -525,3 +594,20 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 <hr class="scene-break">
 
 <<link "Play again">><<run Engine.restart()>><</link>>
+
+:: Credits: Audio
+Music by Scott Buckley, released under Creative Commons Attribution 4.0:
+- "Undertow"
+- "Hiraeth"
+- Conservatory theme track from the Scott Buckley music library
+- https://www.scottbuckley.com.au
+
+Sound effects and ambience from Freesound.org:
+- "Windy, creaky old house ambience" by pfranzen (CC BY 3.0)
+- "room-tone windy house" by klankbeeld (CC BY 3.0)
+- "Match - Strike and Light 02" by JarredGibb (CC0)
+- "SFX Ambiance: Electrical Hum" by trullilulli (CC0)
+- "Creaking Floorboard" by Benboncan (CC BY 3.0)
+- "wood door old open close slow creak steps enter" by kyles (license on source page)
+
+[[Return->Title]]

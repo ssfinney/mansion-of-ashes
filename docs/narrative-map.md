@@ -3,6 +3,7 @@
 ## Passage List
 
 - Title
+- Credits: Audio
 - StoryInit
 - Bedroom
 - Hallway
@@ -21,6 +22,8 @@
 ## Flow Overview
 
 `Title -> Bedroom -> Hallway`
+
+From `Title`, the player can optionally open `Credits: Audio` and return to `Title` before starting.
 
 From `Hallway`, the player can circulate through:
 

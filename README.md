@@ -23,6 +23,7 @@ The first playable prototype is a deterministic narrative slice. You wake in a f
 ├── build/
 ├── docs/
 │   ├── backlog.md
+│   ├── audio-design.md
 │   ├── claude-collaboration.md
 │   ├── game-design.md
 │   ├── narrative-map.md
@@ -61,6 +62,7 @@ This repository does not depend on runtime AI generation. All state and outcomes
 - Compact branching with reconvergence instead of branch sprawl
 - Choices that shift interpretation, trust, and what the player knows
 - Clean variable naming and maintainable SugarCube syntax
+- Subtle audio layering that supports atmosphere without turning scenes into overt horror (see [`docs/audio-design.md`](./docs/audio-design.md))
 
 ## Narrative Collaboration
 
