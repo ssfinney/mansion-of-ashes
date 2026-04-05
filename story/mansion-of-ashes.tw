@@ -189,8 +189,10 @@ The upper hall runs the length of the house like a spine. Without power, every d
 
 <<if $sawConservatoryReveal>>
 Wallpaper hangs in long strips, and in the weak light the buried pattern shows through: roses gone thin and colorless. The corridor feels shorter now, compressed by what you have seen at the far end of the house.
+Near the head of the stair, the family portrait still tilts on its hook. Under the blistered varnish, the child's face pulls your eye before you can look away.
 <<elseif $powerOn>>
 Wallpaper hangs in long strips. With the fixtures awake, you can make out the old pattern beneath the peeling paper: roses, barely recognizable under soot and age.
+Near the head of the stair, a family portrait tilts on its hook, and the old heat-blistered varnish catches in the weak electric light.
 <<else>>
 Wallpaper hangs in long strips. Near the head of the stair, a family portrait tilts on its hook, varnish blistered at the lower right corner by old heat.
 <</if>>
