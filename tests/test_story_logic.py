@@ -21,8 +21,10 @@ def parse_passages(story_text: str) -> dict[str, str]:
         if line.startswith(":: "):
             if current_name is not None:
                 passages[current_name] = "\n".join(current_lines).strip()
+
             header = line[3:]
-            current_name = header.split("[", 1)[0].strip()
+            name = re.split(r"\s*[\[{]", header, maxsplit=1)[0].strip()
+            current_name = name
             current_lines = []
         else:
             current_lines.append(line)
@@ -44,7 +46,7 @@ class TestStoryStructure(unittest.TestCase):
     def test_story_init_defines_all_documented_variables(self):
         documented_vars = set(re.findall(r"## `\$(\w+)`", self.variables_doc))
         story_init = self.passages["StoryInit"]
-        initialized_vars = set(re.findall(r"<<set \$(\w+)\s*=", story_init))
+        initialized_vars = set(re.findall(r"<<set\s+\$(\w+)\s*(?:=|to)\s*", story_init))
 
         missing = documented_vars - initialized_vars
         self.assertFalse(
@@ -77,11 +79,22 @@ class TestStoryStructure(unittest.TestCase):
 
     def test_caretaker_bitter_truth_requires_full_clue_set(self):
         caretaker = self.passages["Caretaker Encounter"]
-        self.assertIn(
-            "<<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>",
+
+        full_truth_set = re.search(
+            r"<<set\s+_fullTruth\s*=\s*\$hasDiaryPage\s+and\s+\$readLedger\s+and\s+\$sawConservatoryReveal\s+and\s+\$heardLockedDoor\s*>>",
             caretaker,
         )
-        self.assertIn('<<if _fullTruth>><<goto "Ending: Bitter Truth">><<else>><<goto "Ending: Escape">><</if>>', caretaker)
+        self.assertIsNotNone(full_truth_set, "Caretaker Encounter must define _fullTruth from clue-state booleans")
+
+        truth_routes = re.findall(
+            r"<<if\s+_fullTruth\s*>>\s*<<goto\s+[\"']Ending: Bitter Truth[\"']>>\s*<<else>>\s*<<goto\s+[\"']Ending: Escape[\"']>>\s*<</if>>",
+            caretaker,
+        )
+        self.assertGreaterEqual(
+            len(truth_routes),
+            1,
+            "Caretaker Encounter should route full-truth branch to Bitter Truth and fallback to Escape",
+        )
 
     def test_silver_key_is_tied_to_conservatory(self):
         hallway = self.passages["Hallway"]
