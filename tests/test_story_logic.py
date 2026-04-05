@@ -78,6 +78,13 @@ class TestStoryStructure(unittest.TestCase):
     def test_caretaker_bitter_truth_requires_full_clue_set(self):
         caretaker = self.passages["Caretaker Encounter"]
 
+        full_truth_line = [line for line in caretaker.splitlines() if "_fullTruth" in line]
+        self.assertTrue(full_truth_line, "Caretaker Encounter must define _fullTruth")
+        for var in ["$hasDiaryPage", "$readLedger", "$sawConservatoryReveal", "$heardLockedDoor"]:
+            self.assertIn(var, full_truth_line[0])
+
+        truth_routes = re.findall(
+            r"<<if\s+_fullTruth\s*>>\s*<<goto\s+[\"']Ending: Bitter Truth[\"']>>\s*<<else>>\s*<<goto\s+[\"']Ending: Escape[\"']>>\s*<</if>>",
         full_truth_match = re.search(
             r"<<set\s+_fullTruth\s*(?:=|to)\s*(?P<logic>.+?)\.?\s*>>",
             caretaker,
