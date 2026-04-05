@@ -91,6 +91,70 @@ a.link-internal:hover {
   margin-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+  #story {
+    max-width: 44rem;
+  }
+
+  #passages {
+    padding: 1.5rem 1rem;
+  }
+
+  .passage {
+    font-size: 1rem;
+    line-height: 1.68;
+  }
+
+  .hud {
+    font-size: 0.84rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .hud-label {
+    letter-spacing: 0.05em;
+  }
+
+  .hud-row {
+    margin-bottom: 0.3rem;
+  }
+
+  a.link-internal {
+    display: inline-block;
+    margin: 0.12rem 0;
+    line-height: 1.45;
+  }
+}
+
+@media (max-width: 420px) {
+  #passages {
+    padding: 1.2rem 0.85rem;
+  }
+
+  .passage {
+    font-size: 0.97rem;
+    line-height: 1.65;
+  }
+
+  .hud {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .hud-label {
+    display: inline-block;
+    margin-bottom: 0.08rem;
+  }
+
+  .hud-value {
+    word-break: break-word;
+  }
+
+  a.link-internal {
+    margin: 0.16rem 0;
+    padding: 0.05rem 0;
+  }
+}
+
 :: StoryCaption
 <div class="hud">
   <div class="hud-row">
@@ -432,7 +496,7 @@ You carry out a set of facts, a larger set of suspicions, and the knowledge that
 
 <hr class="scene-break">
 
-[[Play again->Title]]
+<<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: Bitter Truth
 <div class="ending-title">Ending — The Bitter Truth</div>
@@ -447,7 +511,7 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 
 <hr class="scene-break">
 
-[[Play again->Title]]
+<<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Ending: House of Lies
 <div class="ending-title">Ending — House of Lies</div>
@@ -460,4 +524,4 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 
 <hr class="scene-break">
 
-[[Play again->Title]]
+<<link "Play again">><<run Engine.restart()>><</link>>
