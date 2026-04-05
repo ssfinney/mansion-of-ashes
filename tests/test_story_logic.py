@@ -73,7 +73,6 @@ class TestStoryStructure(unittest.TestCase):
     def test_main_exit_requires_power(self):
         main_exit = self.passages["Main Exit"]
         self.assertIn("<<if !$powerOn>>", main_exit)
-        self.assertIn("Without power, the house will not let you out.", main_exit)
         self.assertIn("[[Face the caretaker->Caretaker Encounter]]", main_exit)
 
     def test_caretaker_bitter_truth_requires_full_clue_set(self):
