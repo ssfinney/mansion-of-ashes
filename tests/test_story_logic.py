@@ -114,6 +114,14 @@ class TestStoryStructure(unittest.TestCase):
         title = self.passages["Title"]
         self.assertIn("fire that ended twelve years ago", title)
 
+    def test_endings_offer_hard_restart(self):
+        endings = [name for name in self.passages if name.startswith("Ending: ")]
+        self.assertTrue(endings, "Expected at least one ending passage")
+
+        for ending_name in endings:
+            ending = self.passages[ending_name]
+            self.assertIn("Engine.restart()", ending)
+
 
 if __name__ == "__main__":
     unittest.main()
