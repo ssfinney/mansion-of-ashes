@@ -72,7 +72,7 @@
 
 ## Bugs And Technical Debt To Address During Next Steps
 
-- `$endingScore` is incremented across multiple passages but currently does not gate ending selection; either wire it into end-state logic or document it as reserved for future scoring UI so contributors do not assume it is live.
+- `$endingScore` now functions as pacing/atmosphere state for dawn progression; keep docs explicit that ending routing depends on clue-state booleans (`_fullTruth`) rather than score thresholds.
 - Any second-playthrough hint feature should treat two concerns separately: (1) in-session restart behavior (`Engine.restart()`), and (2) cross-session persistence via metadata (`memorize()`/`recall()`).
 
 ## Suggested Implementation Order
