@@ -11,6 +11,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -24,61 +28,41 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
+      - name: Install pytest
         run: |
           set -euo pipefail
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
-          if [ -f requirements-dev.txt ]; then
-            pip install -r requirements-dev.txt
-          fi
           pip install pytest
 
-      - name: Restore Tweego and SugarCube cache
-        id: toolchain-cache
+      - name: Cache Tweego and SugarCube
+        id: twine-cache
         uses: actions/cache@v4
         with:
           path: |
             .tools/tweego
             .storyformats/sugarcube-2
-          key: toolchain-${{ runner.os }}-tweego-2.1.1-sugarcube-2.37.3
+          key: ${{ runner.os }}-twine-tweego-2.1.1-sugarcube-2.37.3
 
-      - name: Bootstrap Tweego 2.1.1 and SugarCube 2.37.3
-        if: steps.toolchain-cache.outputs.cache-hit != 'true'
+      - name: Bootstrap toolchain on cache miss
+        if: steps.twine-cache.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
+          ROOT="$GITHUB_WORKSPACE"
+          TMP="/tmp/twine"
+          TOOLS="$ROOT/.tools/tweego"
+          FMT="$ROOT/.storyformats/sugarcube-2"
 
-          mkdir -p .tools/tweego .storyformats
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$TOOLS" "$FMT"
 
-          curl -fsSL -o /tmp/tweego.zip \
-            https://github.com/tmedwards/tweego/releases/download/v2.1.1/tweego-2.1.1-linux-x64.zip
-          python - <<'PY'
-          import os
-          import stat
-          import zipfile
+          wget -O "$TMP/tweego.zip" https://github.com/tmedwards/tweego/releases/download/v2.1.1/tweego-2.1.1-linux-x64.zip
+          python3 -m zipfile -e "$TMP/tweego.zip" "$TMP/tweego"
+          install -m 0755 "$TMP/tweego/tweego" "$TOOLS/tweego"
 
-          with zipfile.ZipFile('/tmp/tweego.zip') as zf:
-              with zf.open('tweego') as src, open('.tools/tweego/tweego', 'wb') as dst:
-                  dst.write(src.read())
+          wget -O "$TMP/sugarcube.zip" https://github.com/tmedwards/sugarcube-2/releases/download/v2.37.3/sugarcube-2.37.3-for-twine-2.1-local.zip
+          python3 -m zipfile -e "$TMP/sugarcube.zip" "$TMP/sugarcube"
+          cp -R "$TMP/sugarcube/sugarcube-2"/. "$FMT"/
 
-          mode = stat.S_IMODE(os.stat('.tools/tweego/tweego').st_mode)
-          os.chmod('.tools/tweego/tweego', mode | 0o111)
-          PY
-
-          rm -rf .storyformats/sugarcube-2
-          curl -fsSL -o /tmp/sugarcube.zip \
-            https://github.com/tmedwards/sugarcube-2/releases/download/v2.37.3/sugarcube-2.37.3-for-twine-2.1-local.zip
-          python - <<'PY'
-          import zipfile
-          from pathlib import Path
-
-          with zipfile.ZipFile('/tmp/sugarcube.zip') as zf:
-              zf.extractall(Path('.storyformats'))
-          PY
-
-      - name: Verify local toolchain contract
+      - name: Verify toolchain
         run: |
           set -euo pipefail
           test -x .tools/tweego/tweego
@@ -107,15 +91,12 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: build/
 
   deploy:
     needs: build-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    concurrency:
-      group: pages
-      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
