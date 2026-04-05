@@ -165,6 +165,8 @@ You wake under a wool blanket that smells of dust and cedar. The fire in the gra
 
 The washstand holds a porcelain basin filmed with ash and one pillar candle burned recently enough that the wax is still soft near the wick. Someone visits this room.
 
+When you push back your sleeve, you find your name written on the inside of your wrist in ink that is not yours. The letters are neat, deliberate, and still dark enough to be fresh.
+
 The window has been nailed shut from the outside — not recently, but not by time alone. Something deliberate.
 
 The only clear way out is the door.
@@ -185,7 +187,13 @@ Weak electric light hums through the surviving fixtures. The hall looks older wi
 The upper hall runs the length of the house like a spine. Without power, every doorway feels provisional — as though the dark might close behind you.
 <</if>>
 
+<<if $sawConservatoryReveal>>
+Wallpaper hangs in long strips, and in the weak light the buried pattern shows through: roses gone thin and colorless. The corridor feels shorter now, compressed by what you have seen at the far end of the house.
+<<elseif $powerOn>>
+Wallpaper hangs in long strips. With the fixtures awake, you can make out the old pattern beneath the peeling paper: roses, barely recognizable under soot and age.
+<<else>>
 Wallpaper hangs in long strips. Near the head of the stair, a family portrait tilts on its hook, varnish blistered at the lower right corner by old heat.
+<</if>>
 
 <hr class="scene-break">
 
@@ -231,10 +239,14 @@ The kitchen is iron, stone, and old order. Copper pans hang above a cold range. 
 A drawer near the stove hangs half-open.
 
 <span id="matches-zone"><<if !$hasMatches>>\
-<<link "Pry the drawer open.">><<set $hasMatches = true>><<replace "#matches-zone">><span class="reveal-text">A box of kitchen matches wrapped in waxed paper, dry despite the damp. You pocket it.</span><</replace>><</link>>\
+<<link "Pry the drawer open.">><<set $hasMatches = true>><<replace "#matches-zone">><span class="reveal-text">A box of kitchen matches wrapped in waxed paper, dry despite the damp. You pocket it. With the weight of it in your coat, the narrow service passage near the back door seems harder to ignore.</span><</replace>><</link>>\
 <<else>>\
 <span class="hud-dim">The open drawer holds nothing more useful.</span>\
 <</if>></span>
+
+<<if $powerOn>>
+The ceiling fixture stirs to a weak amber life, flattening shadows without warming the room.
+<</if>>
 
 <hr class="scene-break">
 
@@ -261,6 +273,10 @@ Beyond it waits a room the house has tried and failed to keep sealed.
 :: Study
 Books line the walls behind wire mesh. The desk at the center of the room is arranged with the particular order of someone who has spent years placing paper against memory.
 
+<<if $powerOn>>
+The restored light in the corridor reaches this far as a dim spill under the door, enough to silver the wire mesh on the shelves.
+<</if>>
+
 On the blotter rests a caretaker's ledger. Beneath it, a folded page.
 
 <hr class="scene-break">
@@ -285,6 +301,10 @@ The desk drawer hangs open — empty except for ash and a bent fountain pen.
 
 :: Basement Stairs
 Stone stairs drop beneath the house in a cold draft that smells of lime and old wiring. The darkness at the bottom is complete.
+
+<<if $sawConservatoryReveal>>
+The cold rising from below no longer feels empty. It feels patient.
+<</if>>
 
 <<if !$hasMatches>>
 Without a light source, the lower landing is only a deeper absence. You would not find the fuse cabinet blind.
@@ -324,13 +344,17 @@ The silver key turns with a dry, reluctant scrape.
 
 The conservatory opens beneath a long cracked ceiling of glass. <<if $endingScore >= 5>>The sky above the broken panes has gone gray-white — dawn pressing in from the east.<<elseif $endingScore >= 4>>The sky through the broken panes has shifted from black to the deep, bruised blue that comes just before gray.<<else>>Moonlight falls through the broken panes in flat, cold angles.<</if>> At the far end, through a collapsed interior window, you can see directly into the sealed east wing — the blackened shell of what was once a nursery.
 
+<<if $powerOn>>
+Somewhere beyond the glass, an exterior lamp flickers and holds, turning the broken frames into blunt geometry.
+<</if>>
+
 <span id="birdcage-zone"><<if !$sawBirdcage>>\
 A rusted birdcage hangs there, untouched by everything except time. <<link "Examine the birdcage.">><<set $sawBirdcage = true>><<replace "#birdcage-zone">><<if $hasDiaryPage>>The cage hangs empty of its cloth cover. The child took it — the diary said the glass room was cold at night. Here is the place she came to keep warm, and here is all that remains of her being here: rust and wire and an empty hook where the cloth once hung.<</if>><<if !$hasDiaryPage>>The cage hangs empty. The wire latch is bent back as if something was removed by small hands unfamiliar with the mechanism.<</if>><</replace>><</link>>\
 <<else>>\
 <<if $hasDiaryPage>>The empty cage hangs in the nursery window — the place the child came for warmth the night the fire started.<</if>><<if !$hasDiaryPage>>The rusted birdcage hangs where it always has, empty and bent open.<</if>>\
 <</if>></span>
 
-The fire is no longer an event in a ledger. It is a room left open inside the house.
+The fire is no longer an event in a ledger. It is a room left open inside the house like a mouth that will not close.
 
 <hr class="scene-break">
 
@@ -367,6 +391,10 @@ When you draw the door inward, cold predawn air enters first. Then you see the m
 <<set $metCaretaker = true>>
 <<set _fullTruth = $hasDiaryPage and $readLedger and $sawConservatoryReveal and $heardLockedDoor>>
 
+Cold air moves between you and the threshold in steady drafts. Gravel and wet leaves give off a mineral smell from the drive.
+
+Mr. Vale stands with one hand near his coat pocket where a ring of keys glints once, then stills. His shoulders are squared as if by habit, but the posture cannot hide how tired he is.
+
 Mr. Vale lowers his hand slowly. He does not ask how you found your way inside. His eyes move once past you toward the lit hall, then toward the upper floor. Not fear — something that has had twelve years to settle into calculation.
 
 "You found your way farther than I meant you to," he says.
@@ -396,7 +424,7 @@ Mr. Vale steps aside without argument.
 
 You leave the house as dawn thins the dark above the grounds. Behind you, the mansion holds its lit windows like a man holding his breath — not revived so much as briefly permitted back into the world.
 
-You carry out a set of facts, a larger set of suspicions, and the clear sense that survival has outrun explanation. There will be time later to decide whether that is mercy or failure. The wet grass is cold under your feet. The gate stands open. You go out before the dawn does.
+You carry out a set of facts, a larger set of suspicions, and the knowledge that you survived something you do not yet understand. There will be time later to decide whether that is mercy or failure. The wet grass is cold under your feet. The gate stands open. You go out before the dawn does.
 
 <hr class="scene-break">
 
@@ -407,7 +435,7 @@ You carry out a set of facts, a larger set of suspicions, and the clear sense th
 
 Mr. Vale reads the diary page once. He reads it again. Then he closes his eyes.
 
-"I hid the key because her father wanted the room sealed," he says at last. "After the fire, everyone needed one clean story. A tired man. A careless lamp. No child awake and frightened enough to move through the glass room alone at night. I let the lie stand because I had told her to be quiet earlier that evening — not to protect myself from the law, but to protect what remained of the family's ability to go on. Then the years passed and the lie became the only thing I knew how to tend."
+"I hid the key because her father wanted the room sealed," he says at last. "After the fire, everyone needed one clean story. A tired man. A careless lamp. No child awake and frightened enough to move through the glass room alone at night. I let the lie stand because I had told her to be quiet earlier that evening — not to protect myself from the law, but to protect what was left of the family. Then the years passed and the lie became the only thing I knew how to tend."
 
 He unlocks the garden gate and does not ask you to absolve him.
 
