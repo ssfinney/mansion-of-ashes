@@ -27,5 +27,6 @@ if [ ! -f "$STORY_FORMAT_FILE" ]; then
   exit 1
 fi
 
+mkdir -p "$(dirname "$OUTPUT_FILE")"
 TWEEGO_PATH="$STORY_FORMATS_ROOT" "$TWEEGO_BIN" -f sugarcube-2 -o "$OUTPUT_FILE" "$STORY_FILE"
 echo "Built $OUTPUT_FILE"
