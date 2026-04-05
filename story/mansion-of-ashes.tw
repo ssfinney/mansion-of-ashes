@@ -194,7 +194,7 @@ In the weak light, the buried pattern shows through the torn paper: roses gone t
 <<elseif $powerOn>>
 With the fixtures awake, you can make out the old pattern beneath the peeling paper: roses, barely recognizable under soot and age.
 <</if>>
-<<if visited() is 1>>Your own footsteps carry farther than expected here, each step returning off plaster and wood.<</if>>
+<<if visited("Hallway") is 1>>Your own footsteps carry farther than expected here, each step returning off plaster and wood.<</if>>
 
 <hr class="scene-break">
 
