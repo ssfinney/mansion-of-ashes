@@ -295,7 +295,7 @@ The only clear way out is the door.
 [[Step into the hallway->Hallway]]
 
 :: Hallway
-<<audio "sfx-floorboard-creak" volume 0.5 play>>
+<<if $audioEnabled>><<audio "sfx-floorboard-creak" volume 0.5 play>><</if>>
 
 <<if $endingScore >= 4>>
 Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
@@ -387,7 +387,7 @@ The back door is bolted and swollen in its frame. Beside it, a narrow service pa
 [[Return to the hallway->Hallway]]
 
 :: Study Door
-<<audio "sfx-door-creak" volume 0.5 play>>
+<<if $audioEnabled>><<audio "sfx-door-creak" volume 0.5 play>><</if>>
 
 The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. The door looks locked; the latch has only warped.
 
@@ -445,7 +445,7 @@ You have matches. The descent looks precarious but manageable.
 <</if>>
 
 :: Fuse Box
-<<audio "sfx-match-strike" volume 0.75 play>>
+<<if $audioEnabled>><<audio "sfx-match-strike" volume 0.75 play>><</if>>
 
 You strike a match. Sulfur flares bright enough to make you blink.
 Heat pricks your fingertips while the smell catches sharp at the back of your nose.
