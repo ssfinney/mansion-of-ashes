@@ -206,6 +206,55 @@ a.link-internal:hover {
 <<set $heardLockedDoor    = false>>
 <<set $sawBirdcage        = false>>
 <<set $endingScore        = 0>>
+<<set $audioEnabled       = false>>
+
+<<cacheaudio "music-undertow" "assets/audio/music/undertow.mp3">>
+<<cacheaudio "music-hiraeth" "assets/audio/music/hiraeth.mp3">>
+<<cacheaudio "music-conservatory" "assets/audio/music/conservatory-theme.mp3">>
+<<cacheaudio "amb-house" "assets/audio/ambience/house-interior.mp3">>
+<<cacheaudio "amb-windy-room" "assets/audio/ambience/windy-room.mp3">>
+<<cacheaudio "amb-elec-hum" "assets/audio/ambience/electrical-hum.mp3">>
+<<cacheaudio "sfx-match-strike" "assets/audio/sfx/match-strike.mp3">>
+<<cacheaudio "sfx-floorboard-creak" "assets/audio/sfx/floorboard-creak.mp3">>
+<<cacheaudio "sfx-door-creak" "assets/audio/sfx/door-creak.mp3">>
+
+:: PassageHeader
+<<if !$audioEnabled>>
+<<audio ":all" stop>>
+<<else>>
+<<set _p = State.passage>>
+<<if _p is "Title" or _p is "Credits: Audio">>
+<<audio "music-undertow" loop volume 0.24 fadein play>>
+<<audio "music-hiraeth" stop>>
+<<audio "music-conservatory" stop>>
+<<audio "amb-house" stop>>
+<<audio "amb-windy-room" stop>>
+<<audio "amb-elec-hum" stop>>
+<<elseif _p is "Conservatory">>
+<<audio "music-undertow" stop>>
+<<audio "music-hiraeth" fadeout stop>>
+<<audio "music-conservatory" loop volume 0.26 fadein play>>
+<<audio "amb-house" stop>>
+<<audio "amb-windy-room" loop volume 0.22 play>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+<<elseif _p is "Caretaker Encounter">>
+<<audio "music-undertow" stop>>
+<<audio "music-hiraeth" stop>>
+<<audio "music-conservatory" stop>>
+<<audio "amb-house" loop volume 0.08 play>>
+<<audio "amb-windy-room" stop>>
+<<audio "amb-elec-hum" stop>>
+<<elseif _p.startsWith("Ending:")>>
+<<audio ":all" stop>>
+<<else>>
+<<audio "music-undertow" fadeout stop>>
+<<audio "music-conservatory" fadeout stop>>
+<<audio "music-hiraeth" loop volume 0.24 fadein play>>
+<<audio "amb-house" loop volume 0.18 play>>
+<<audio "amb-windy-room" stop>>
+<<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
+<</if>>
+<</if>>
 
 :: Title
 <div style="text-align:center; padding: 2rem 0 1rem;">
@@ -223,6 +272,14 @@ You do not remember how you came here. You remember smoke. You remember a locked
 <hr class="scene-break">
 
 [[Begin->Bedroom]]
+<br>
+[[Audio credits->Credits: Audio]]
+<br>
+<<if !$audioEnabled>>
+<<link "Enable audio">><<set $audioEnabled = true>><<goto "Title">><</link>>
+<<else>>
+<<link "Mute audio">><<set $audioEnabled = false>><<audio ":all" stop>><<goto "Title">><</link>>
+<</if>>
 
 :: Bedroom
 You wake under a wool blanket that smells of dust and cedar. The fire in the grate has been cold for hours. The corridor beyond the door is unlit.
@@ -238,6 +295,8 @@ The only clear way out is the door.
 [[Step into the hallway->Hallway]]
 
 :: Hallway
+<<if $audioEnabled>><<audio "sfx-floorboard-creak" volume 0.5 play>><</if>>
+
 <<if $endingScore >= 4>>
 Beyond the upper windows, the sky has gone from black to ash. Dawn is minutes away, not hours.
 <<elseif $endingScore >= 2>>
@@ -328,6 +387,8 @@ The back door is bolted and swollen in its frame. Beside it, a narrow service pa
 [[Return to the hallway->Hallway]]
 
 :: Study Door
+<<if $audioEnabled>><<audio "sfx-door-creak" volume 0.5 play>><</if>>
+
 The study door bears the worst of the old smoke damage — the wood above the lintel has gone black. The door looks locked; the latch has only warped.
 
 Beyond it waits a room the house has tried and failed to keep sealed.
@@ -384,6 +445,8 @@ You have matches. The descent looks precarious but manageable.
 <</if>>
 
 :: Fuse Box
+<<if $audioEnabled>><<audio "sfx-match-strike" volume 0.75 play>><</if>>
+
 You strike a match. Sulfur flares bright enough to make you blink.
 Heat pricks your fingertips while the smell catches sharp at the back of your nose.
 
@@ -525,3 +588,19 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 <hr class="scene-break">
 
 <<link "Play again">><<run Engine.restart()>><</link>>
+
+:: Credits: Audio
+// Provisional attribution list. Keep only files actually shipped in build assets.
+Music by Scott Buckley, released under Creative Commons Attribution 4.0:
+- "Undertow"
+- "Hiraeth"
+- https://www.scottbuckley.com.au
+
+Sound effects and ambience from Freesound.org:
+- "Windy, creaky old house ambience" by pfranzen (CC BY 3.0)
+- "room-tone windy house" by klankbeeld (CC BY 3.0)
+- "Match - Strike and Light 02" by JarredGibb (CC0)
+- "SFX Ambiance: Electrical Hum" by trullilulli (CC0)
+- "Creaking Floorboard" by Benboncan (CC BY 3.0)
+
+[[Return->Title]]
