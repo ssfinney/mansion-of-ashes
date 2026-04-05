@@ -77,9 +77,16 @@
 - Changes: set in `Kitchen`
 - Used by: `StoryCaption`, `Caretaker Encounter`
 
+## `$sawBirdcage`
+
+- Type: boolean
+- Purpose: tracks whether the player examined the rusted birdcage in the conservatory; gates the diary-aware reveal text so it only fires once per visit and shows the correct variant (with or without diary page)
+- Changes: set in `Conservatory` on first birdcage examine
+- Used by: `Conservatory` (birdcage-zone span)
+
 ## `$endingScore`
 
 - Type: integer
-- Purpose: summarizes clue completeness for ending resolution
-- Changes: incremented in `Kitchen`, `Study`, `Hallway`, `Conservatory`, and `Caretaker Encounter`
-- Used by: ending routing in `Caretaker Encounter`
+- Purpose: summarizes clue completeness for ending resolution and drives dawn-progression text in `Hallway` and `Conservatory`
+- Changes: incremented in `Kitchen` (+1 pantry), `Study` (+1 ledger, +1 diary), `Hallway` (+1 silver key), `Conservatory` (+1 reveal)
+- Used by: ending routing in `Caretaker Encounter`; sky-description conditionals in `Hallway` and `Conservatory`
