@@ -590,10 +590,10 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 <<link "Play again">><<run Engine.restart()>><</link>>
 
 :: Credits: Audio
+// Provisional attribution list. Keep only files actually shipped in build assets.
 Music by Scott Buckley, released under Creative Commons Attribution 4.0:
 - "Undertow"
 - "Hiraeth"
-- Conservatory theme track from the Scott Buckley music library
 - https://www.scottbuckley.com.au
 
 Sound effects and ambience from Freesound.org:
@@ -602,6 +602,5 @@ Sound effects and ambience from Freesound.org:
 - "Match - Strike and Light 02" by JarredGibb (CC0)
 - "SFX Ambiance: Electrical Hum" by trullilulli (CC0)
 - "Creaking Floorboard" by Benboncan (CC BY 3.0)
-- "wood door old open close slow creak steps enter" by kyles (license on source page)
 
 [[Return->Title]]

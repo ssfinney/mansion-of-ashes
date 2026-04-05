@@ -19,6 +19,8 @@
 - Ending: Bitter Truth
 - Ending: House of Lies
 
+Technical passage (non-narrative): `PassageHeader` handles centralized audio routing when enabled.
+
 ## Flow Overview
 
 `Title -> Bedroom -> Hallway`
