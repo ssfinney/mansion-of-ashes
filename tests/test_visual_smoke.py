@@ -63,7 +63,7 @@ def _go_to_short_final_state(page: Page) -> None:
 
 def _assert_visual(page: Page, name: str) -> None:
     expect(page).to_have_screenshot(
-        f"../screenshots/baseline/{name}.png",
+        path=str(ROOT / "tests" / "screenshots" / "baseline" / f"{name}.png"),
         full_page=True,
         threshold=VISUAL_THRESHOLD,
     )
