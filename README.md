@@ -75,3 +75,22 @@ If you use Claude for narrative drafting, treat it as a prose collaborator rathe
 - Introduce UI polish in SugarCube: inventory summary, subtle styling, restart affordances
 - Export and check a browser-playable build in `build/`
 - Playtest pacing, clue readability, and ending thresholds
+
+## Screenshot Smoke Checks
+
+A minimal Playwright screenshot suite is available for UI regression smoke checks.
+
+- Tests: `tests/test_visual_smoke.py`
+- Baselines: `tests/screenshots/baseline/`
+- Failure artifacts: `tests/screenshots/failures/`
+
+Run locally:
+
+```bash
+bash scripts/build-story.sh
+pytest -q tests/test_story_logic.py
+python -m playwright install --with-deps chromium
+pytest -q tests/test_visual_smoke.py --browser chromium --output tests/screenshots/failures
+```
+
+On first run, Playwright writes missing snapshots and then compares against those baselines on subsequent runs.

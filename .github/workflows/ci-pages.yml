@@ -76,7 +76,7 @@ jobs:
       - name: Run tests
         run: |
           set -euo pipefail
-          pytest -q
+          pytest -q tests/test_story_logic.py
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -98,8 +98,51 @@ jobs:
         with:
           path: build/
 
-  deploy:
+  screenshot-tests:
     needs: build-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install test dependencies
+        run: |
+          set -euo pipefail
+          pip install -r requirements-dev.txt
+
+      - name: Install Playwright Chromium
+        run: |
+          set -euo pipefail
+          python -m playwright install --with-deps chromium
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: mansion-of-ashes-build
+          path: build/
+
+      - name: Run screenshot smoke tests
+        run: |
+          set -euo pipefail
+          mkdir -p tests/screenshots/failures
+          pytest -q tests/test_visual_smoke.py --browser chromium --output tests/screenshots/failures
+
+      - name: Upload visual regression failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-failures
+          path: tests/screenshots/failures/
+          if-no-files-found: warn
+
+  deploy:
+    needs: [build-test, screenshot-tests]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
