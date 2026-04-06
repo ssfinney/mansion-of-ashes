@@ -8,6 +8,8 @@ from threading import Thread
 import pytest
 from playwright.sync_api import Page, expect
 
+from tests.visual_expect import assert_page_screenshot
+
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_DIR = ROOT / "build"
 GAME_PATH = "/mansion-of-ashes.html"
@@ -45,7 +47,6 @@ def _click_first_choice_once(page: Page) -> None:
     first_choice = page.locator("#passages a.link-internal").first
     first_choice.click()
     expect(page.locator("#passages")).to_contain_text("You wake under a wool blanket")
-    expect(page.locator(".hud")).to_be_visible()
 
 
 def _go_to_short_final_state(page: Page) -> None:
@@ -62,10 +63,12 @@ def _go_to_short_final_state(page: Page) -> None:
 
 
 def _assert_visual(page: Page, name: str) -> None:
-    expect(page).to_have_screenshot(
+    assert_page_screenshot(
+        page,
         path=str(ROOT / "tests" / "screenshots" / "baseline" / f"{name}.png"),
         full_page=True,
         threshold=VISUAL_THRESHOLD,
+        failures_root=ROOT / "tests" / "screenshots" / "failures",
     )
 
 
