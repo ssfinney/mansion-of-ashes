@@ -97,3 +97,24 @@
 - Purpose: stores player audio consent/preference so sound remains opt-in and silence stays the default texture
 - Changes: toggled in `Title` via explicit enable/mute links
 - Used by: `PassageHeader` to route all music/ambience playback and stop all tracks when muted
+
+## `$textSize`
+
+- Type: string (`"normal"` or `"large"`)
+- Purpose: stores the player's preferred reading scale for body text and passages
+- Changes: set in `StoryInit`, toggled in `Preferences`
+- Used by: `PassageHeader` (applies `text-size-large` body class)
+
+## `$lineHeightMode`
+
+- Type: string (`"normal"` or `"relaxed"`)
+- Purpose: controls reading density by switching between default and relaxed line spacing
+- Changes: set in `StoryInit`, toggled in `Preferences`
+- Used by: `PassageHeader` (applies `line-height-relaxed` body class)
+
+## `$reducedOrnament`
+
+- Type: boolean
+- Purpose: enables a lower-ornament visual mode with flatter panel treatment and lighter decorative contrast
+- Changes: set in `StoryInit`, toggled in `Preferences`
+- Used by: `PassageHeader` (applies `reduced-ornament` body class)

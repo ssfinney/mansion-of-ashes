@@ -5,6 +5,7 @@
 - Title
 - Credits: Audio
 - StoryInit
+- Preferences
 - Bedroom
 - Hallway
 - Kitchen
@@ -25,7 +26,9 @@ Technical passage (non-narrative): `PassageHeader` handles centralized audio rou
 
 `Title -> Bedroom -> Hallway`
 
-From `Title`, the player can optionally open `Credits: Audio` and return to `Title` before starting.
+From `Title`, the player can optionally open `Preferences` and `Credits: Audio` before starting.
+
+`Preferences` reconverges directly to `Title` and does not branch narrative content.
 
 From `Hallway`, the player can circulate through:
 
