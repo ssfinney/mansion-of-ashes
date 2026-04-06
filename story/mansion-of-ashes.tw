@@ -507,7 +507,7 @@ body.power-off hr.scene-break {
 <<else>>
 <<set _p = State.passage>>
 <<if _p is "Title" or _p is "Credits: Audio">>
-<<audio "music-undertow" loop volume 0.24 fadein play>>
+<<audio "music-undertow" loop volume 0.24 fadein>>
 <<audio "music-hiraeth" stop>>
 <<audio "music-conservatory" stop>>
 <<audio "amb-house" stop>>
@@ -515,8 +515,8 @@ body.power-off hr.scene-break {
 <<audio "amb-elec-hum" stop>>
 <<elseif _p is "Conservatory">>
 <<audio "music-undertow" stop>>
-<<audio "music-hiraeth" fadeout stop>>
-<<audio "music-conservatory" loop volume 0.26 fadein play>>
+<<audio "music-hiraeth" fadeout>>
+<<audio "music-conservatory" loop volume 0.26 fadein>>
 <<audio "amb-house" stop>>
 <<audio "amb-windy-room" loop volume 0.22 play>>
 <<if $powerOn>><<audio "amb-elec-hum" loop volume 0.12 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
@@ -530,9 +530,9 @@ body.power-off hr.scene-break {
 <<elseif _p.startsWith("Ending:")>>
 <<audio ":all" stop>>
 <<else>>
-<<audio "music-undertow" fadeout stop>>
-<<audio "music-conservatory" fadeout stop>>
-<<audio "music-hiraeth" loop volume 0.24 fadein play>>
+<<audio "music-undertow" fadeout>>
+<<audio "music-conservatory" fadeout>>
+<<audio "music-hiraeth" loop volume 0.24 fadein>>
 <<audio "amb-house" loop volume 0.18 play>>
 <<audio "amb-windy-room" stop>>
 <<if $powerOn>><<audio "amb-elec-hum" loop volume 0.14 play>><<else>><<audio "amb-elec-hum" stop>><</if>>
