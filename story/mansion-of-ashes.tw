@@ -22,7 +22,9 @@ Mansion of Ashes
   --border-soft: #2f2823;
   --text: #d8d1c3;
   --text-soft: #b8af9f;
-  --text-dim: #7b7062;
+  --text-dim: #9f9383;
+  --text-muted: #8f8375;
+  --text-faint: #7f7468;
   --accent: #c8a96e;
   --accent-hover: #e8c98e;
   --shadow: rgba(0, 0, 0, 0.32);
@@ -95,7 +97,7 @@ hr.scene-break {
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.24em;
-  color: #847868;
+  color: var(--text-faint);
   text-transform: uppercase;
 }
 
@@ -103,12 +105,12 @@ hr.scene-break {
   margin: 0.65rem 0 0;
   font-size: clamp(2rem, 4.4vw, 2.7rem);
   letter-spacing: 0.03em;
-  color: #d7cab5;
+  color: var(--text);
 }
 
 .title-meta {
   margin: 0.75rem 0 0;
-  color: #877b6c;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -150,7 +152,7 @@ hr.scene-break {
 }
 
 .hud-label {
-  color: #8a7f72;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-size: 0.76rem;
@@ -164,7 +166,7 @@ hr.scene-break {
 }
 
 .hud-dim {
-  color: #5a5248;
+  color: var(--text-dim);
   font-style: italic;
 }
 
@@ -228,7 +230,7 @@ a.link-external:focus-visible {
 }
 
 .inline-sep {
-  color: #6b6058;
+  color: var(--text-faint);
   margin: 0 0.35rem;
 }
 
@@ -237,7 +239,7 @@ a.link-external:focus-visible {
 ========================================= */
 .ending-title {
   font-size: 0.9rem;
-  color: #6b6058;
+  color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.22em;
   margin-bottom: 1.4rem;
@@ -280,12 +282,17 @@ a.link-external:focus-visible {
   font-size: 0.82rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #958878;
+  color: var(--text-muted);
 }
 
 .system-value {
-  color: #dacdb8;
+  color: var(--text);
   font-size: 0.95rem;
+}
+
+.system-active {
+  color: var(--accent-hover);
+  font-weight: 600;
 }
 
 /* =========================================
@@ -298,13 +305,9 @@ body.reduced-ornament .ending-actions a.link-internal,
 body.reduced-ornament .hud-controls a.link-internal {
   box-shadow: none;
   background: rgba(22, 18, 15, 0.92);
+  border-color: #362f2a;
 }
 
-body.reduced-ornament .hud,
-body.reduced-ornament .system-panel,
-body.reduced-ornament .title-actions a.link-internal,
-body.reduced-ornament .ending-actions a.link-internal,
-body.reduced-ornament .hud-controls a.link-internal,
 body.reduced-ornament hr.scene-break {
   border-color: #362f2a;
 }
@@ -575,15 +578,15 @@ You do not remember how you came here. You remember smoke. You remember a locked
     <span class="system-label">Text size</span>
     <span class="system-value">
       <<if $textSize is "normal">>
-      <span class="hud-dim">Normal</span>
+      <strong class="system-active">Normal</strong>
       <<else>>
-      <<link "Normal">><<set $textSize = "normal">><<goto "Preferences">><</link>>
+      <<link "Normal">><<set $textSize = "normal">><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
       <span class="inline-sep">·</span>
       <<if $textSize is "large">>
-      <span class="hud-dim">Large</span>
+      <strong class="system-active">Large</strong>
       <<else>>
-      <<link "Large">><<set $textSize = "large">><<goto "Preferences">><</link>>
+      <<link "Large">><<set $textSize = "large">><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
     </span>
   </div>
@@ -592,15 +595,15 @@ You do not remember how you came here. You remember smoke. You remember a locked
     <span class="system-label">Line height</span>
     <span class="system-value">
       <<if $lineHeightMode is "normal">>
-      <span class="hud-dim">Standard</span>
+      <strong class="system-active">Standard</strong>
       <<else>>
-      <<link "Standard">><<set $lineHeightMode = "normal">><<goto "Preferences">><</link>>
+      <<link "Standard">><<set $lineHeightMode = "normal">><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
       <span class="inline-sep">·</span>
       <<if $lineHeightMode is "relaxed">>
-      <span class="hud-dim">Relaxed</span>
+      <strong class="system-active">Relaxed</strong>
       <<else>>
-      <<link "Relaxed">><<set $lineHeightMode = "relaxed">><<goto "Preferences">><</link>>
+      <<link "Relaxed">><<set $lineHeightMode = "relaxed">><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
     </span>
   </div>
@@ -609,15 +612,15 @@ You do not remember how you came here. You remember smoke. You remember a locked
     <span class="system-label">Ornament</span>
     <span class="system-value">
       <<if !$reducedOrnament>>
-      <span class="hud-dim">Standard</span>
+      <strong class="system-active">Standard</strong>
       <<else>>
-      <<link "Standard">><<set $reducedOrnament = false>><<goto "Preferences">><</link>>
+      <<link "Standard">><<set $reducedOrnament = false>><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
       <span class="inline-sep">·</span>
       <<if $reducedOrnament>>
-      <span class="hud-dim">Reduced</span>
+      <strong class="system-active">Reduced</strong>
       <<else>>
-      <<link "Reduced">><<set $reducedOrnament = true>><<goto "Preferences">><</link>>
+      <<link "Reduced">><<set $reducedOrnament = true>><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
     </span>
   </div>
@@ -626,9 +629,9 @@ You do not remember how you came here. You remember smoke. You remember a locked
     <span class="system-label">Audio</span>
     <span class="system-value">
       <<if !$audioEnabled>>
-      <<link "Enable">><<set $audioEnabled = true>><<goto "Preferences">><</link>>
+      <<link "Enable">><<set $audioEnabled = true>><<run Engine.play(State.passage, true)>><</link>>
       <<else>>
-      <<link "Mute">><<set $audioEnabled = false>><<audio ":all" stop>><<goto "Preferences">><</link>>
+      <<link "Mute">><<set $audioEnabled = false>><<audio ":all" stop>><<run Engine.play(State.passage, true)>><</link>>
       <</if>>
     </span>
   </div>
@@ -918,7 +921,7 @@ You carry out a set of facts, a larger set of suspicions, and the knowledge that
 
 <div class="ending-actions">
 <<link "Play again">><<run Engine.restart()>><</link>>
-[[Return to title->Title]]
+<<link "Return to title">><<run Engine.restart()>><</link>>
 </div>
 
 :: Ending: Bitter Truth
@@ -936,7 +939,7 @@ Dawn catches in the broken conservatory panes above the east wing, and for the f
 
 <div class="ending-actions">
 <<link "Play again">><<run Engine.restart()>><</link>>
-[[Return to title->Title]]
+<<link "Return to title">><<run Engine.restart()>><</link>>
 </div>
 
 :: Ending: House of Lies
@@ -952,7 +955,7 @@ You go out into the paling dark carrying a story sharp enough to hold — sharp 
 
 <div class="ending-actions">
 <<link "Play again">><<run Engine.restart()>><</link>>
-[[Return to title->Title]]
+<<link "Return to title">><<run Engine.restart()>><</link>>
 </div>
 
 :: Credits: Audio
